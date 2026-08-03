@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <!-- ล็อคไม่ให้หน้าจอบนมือถือขยายหรือซูมเอง -->
+  <!-- ล็อคไม่ให้หน้าจอบนมือถือขยายหรือซูมเองเวลาพิมพ์ -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>กมลพาณิช - รายการสินค้าและโปรโมชั่น</title>
   
@@ -20,14 +20,20 @@
 <body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between">
 
   <div>
-    <!-- Header -->
+    <!-- Header พร้อมภาพโปร่งแสง (Background Overlay Image) -->
     <header class="relative w-full py-10 md:py-16 px-4 overflow-hidden border-b border-emerald-900/40 text-center">
+     <!-- ภาพพื้นหลังโปร่งแสง -->
+     <div class="absolute inset-0 z-0 opacity-15 pointer-events-none bg-cover bg-center" 
+          style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%) contrast(120%);">
+     </div>
+     <div class="absolute inset-0 bg-gradient-to-b from-[#0a1f1a]/80 via-[#0a1f1a]/60 to-[#0a1f1a] z-0"></div>
+
      <div class="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
-      <div class="mb-3 text-[#c9a84c] p-3 bg-emerald-950/80 rounded-2xl border border-emerald-700/40">
+      <div class="mb-3 text-[#c9a84c] p-3 bg-emerald-950/80 rounded-2xl border border-emerald-700/40 shadow-xl backdrop-blur-sm">
        <i data-lucide="shopping-cart" class="w-10 h-10 md:w-14 md:h-14"></i>
       </div>
-      <h1 class="text-3xl md:text-6xl font-extrabold text-white mb-2">กมลพาณิช</h1>
-      <p class="text-amber-300 font-medium text-base md:text-xl mb-6">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
+      <h1 class="text-3xl md:text-6xl font-extrabold text-white mb-2 drop-shadow-md">กมลพาณิช</h1>
+      <p class="text-amber-300 font-medium text-base md:text-xl mb-6 drop-shadow">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
       
       <div class="flex flex-wrap justify-center gap-3">
         <a href="tel:0812345678" class="bg-[#c9a84c] hover:bg-amber-400 text-[#0a1f1a] px-5 py-2 rounded-full font-bold text-xs md:text-sm flex items-center gap-2 transition shadow-lg">
@@ -54,7 +60,7 @@
         </button>
       </div>
 
-      <!-- Promo Grid: ปรับการแสดงผลเน้นรูปโปรโมชั่นชัดๆ -->
+      <!-- Promo Grid: เน้นรูปโปรโมชั่นชัดเจน ไม่โดนตัวหนังสือบดบัง -->
       <div id="promo-list" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
           <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-amber-400"></i>
@@ -97,10 +103,14 @@
     </section>
   </div>
 
-  <!-- Footer Section (แสดงเบอร์โทรศัพท์ และพิกัด Google Maps) -->
-  <footer class="w-full bg-[#061512] border-t border-emerald-900/60 py-10 px-4 mt-10">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-      
+  <!-- Footer Section พร้อมภาพโปร่งแสงด้านหลัง -->
+  <footer class="relative w-full bg-[#061512] border-t border-emerald-900/60 py-10 px-4 mt-10 overflow-hidden">
+    <!-- ภาพพื้นหลังโปร่งแสงใน Footer -->
+    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none bg-cover bg-center" 
+         style="background-image: url('https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%);">
+    </div>
+
+    <div class="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="text-center md:text-left">
         <h3 class="text-xl font-bold text-amber-400 flex items-center justify-center md:justify-start gap-2 mb-2">
           <i data-lucide="store" class="w-5 h-5"></i> ร้านกมลพาณิช
@@ -112,8 +122,8 @@
       </div>
 
       <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-        <!-- ปุ่มโทรศัพท์ (สามารถเปลี่ยนเบอร์โทรใน href="tel:0812345678" ได้ตามต้องการ) -->
-        <a href="tel:0812345678" class="bg-[#122a22] hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition">
+        <!-- ปุ่มโทรศัพท์ -->
+        <a href="tel:0812345678" class="bg-[#122a22]/90 hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition shadow-lg backdrop-blur-sm">
           <div class="p-2 bg-emerald-800/60 rounded-lg text-amber-400">
             <i data-lucide="phone-call" class="w-4 h-4"></i>
           </div>
@@ -124,7 +134,7 @@
         </a>
 
         <!-- ปุ่มพิกัด Google Maps -->
-        <a href="https://maps.app.goo.gl/CAakXKi17CUUnvnG6" target="_blank" class="bg-[#122a22] hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition">
+        <a href="https://maps.app.goo.gl/CAakXKi17CUUnvnG6" target="_blank" class="bg-[#122a22]/90 hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition shadow-lg backdrop-blur-sm">
           <div class="p-2 bg-emerald-800/60 rounded-lg text-red-400">
             <i data-lucide="map-pin" class="w-4 h-4"></i>
           </div>
@@ -134,14 +144,14 @@
           </div>
         </a>
       </div>
-
     </div>
-    <div class="max-w-6xl mx-auto border-t border-emerald-950 mt-8 pt-4 text-center text-[11px] text-gray-500">
+
+    <div class="relative z-10 max-w-6xl mx-auto border-t border-emerald-950 mt-8 pt-4 text-center text-[11px] text-gray-500">
       © กมลพาณิช - สงวนลิขสิทธิ์
     </div>
   </footer>
 
-  <!-- Modal Promo (ปรับ font-size ใน input เป็น text-base เพื่อแก้ปัญหาหน้าจอมือถือขยายเอง) -->
+  <!-- Modal Promo -->
   <div id="modal-promo" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-5 w-full max-w-md shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-emerald-800">
@@ -166,7 +176,7 @@
     </div>
   </div>
 
-  <!-- Modal Product (ปรับ font-size ใน input เป็น text-base เพื่อแก้ปัญหาหน้าจอมือถือขยายเอง) -->
+  <!-- Modal Product -->
   <div id="modal-product" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-5 w-full max-w-md shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-emerald-800">
@@ -227,7 +237,6 @@
       }
     }
 
-    // วาดโปรโมชั่นแบบเน้นรูปภาพชัดๆ ตัวหนังสือไม่บดบังรูป
     function renderPromotions() {
       const container = document.getElementById("promo-list");
       container.innerHTML = "";
@@ -241,13 +250,11 @@
         const img = p.imageUrl || 'https://via.placeholder.com/600x300?text=No+Promotion+Image';
         container.innerHTML += `
           <div id="promo-card-${p.id}" class="bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-xl">
-            <!-- แสดงรูปภาพโปรโมชั่นเต็มๆ ตา ชัดเจน -->
             <div class="relative w-full h-52 sm:h-60 bg-black overflow-hidden">
               <img src="${img}" loading="lazy" class="w-full h-full object-contain bg-black/40">
               <span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full shadow">PROMOTION</span>
             </div>
             
-            <!-- ส่วนข้อความสั้นๆ ด้านล่างภาพ -->
             <div class="p-4 bg-[#122a22] border-t border-emerald-900/50 flex flex-col justify-between flex-1">
               <div>
                 <h3 class="text-base font-bold text-amber-300 line-clamp-1">${p.title}</h3>
@@ -317,7 +324,6 @@
       renderProducts();
     }
 
-    // บีบอัดภาพให้อยู่ในขนาดเล็กพิเศษ 15 - 25 KB ส่งไว ไม่ค้าง
     function compressImage(file, maxWidth = 400, quality = 0.35) {
       return new Promise((resolve) => {
         if (!file) return resolve({ fileData: null, fileName: null });
@@ -423,7 +429,6 @@
       }
     });
 
-    // ลบแล้วหายทันทีบนหน้าจอ
     async function deleteItem(sheetName, id) {
       if (confirm("ยืนยันการลบรายการนี้?")) {
         if (sheetName === "Promotions") {
