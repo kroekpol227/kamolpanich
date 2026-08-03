@@ -20,11 +20,11 @@
 <body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between">
 
   <div>
-    <!-- Header พร้อมภาพโปร่งแสง (Background Overlay Image) -->
+    <!-- Header พร้อมภาพโกดังสินค้าแบบโปร่งแสงมากๆ (opacity-8) -->
     <header class="relative w-full py-10 md:py-16 px-4 overflow-hidden border-b border-emerald-900/40 text-center">
-     <!-- ภาพพื้นหลังโปร่งแสง -->
-     <div class="absolute inset-0 z-0 opacity-15 pointer-events-none bg-cover bg-center" 
-          style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%) contrast(120%);">
+     <!-- ภาพพื้นหลังโกดังสินค้า (Warehouse) โปร่งแสงจางๆ -->
+     <div class="absolute inset-0 z-0 opacity-8 pointer-events-none bg-cover bg-center" 
+          style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%) contrast(110%);">
      </div>
      <div class="absolute inset-0 bg-gradient-to-b from-[#0a1f1a]/80 via-[#0a1f1a]/60 to-[#0a1f1a] z-0"></div>
 
@@ -60,7 +60,7 @@
         </button>
       </div>
 
-      <!-- Promo Grid: เน้นรูปโปรโมชั่นชัดเจน ไม่โดนตัวหนังสือบดบัง -->
+      <!-- Promo Grid -->
       <div id="promo-list" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
           <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-amber-400"></i>
@@ -103,11 +103,11 @@
     </section>
   </div>
 
-  <!-- Footer Section พร้อมภาพโปร่งแสงด้านหลัง -->
+  <!-- Footer Section พร้อมภาพโกดังโปร่งแสงแบบบางเบา (opacity-5) -->
   <footer class="relative w-full bg-[#061512] border-t border-emerald-900/60 py-10 px-4 mt-10 overflow-hidden">
-    <!-- ภาพพื้นหลังโปร่งแสงใน Footer -->
-    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none bg-cover bg-center" 
-         style="background-image: url('https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%);">
+    <!-- ภาพพื้นหลังโกดังสินค้า โปร่งแสงบางเบามาก -->
+    <div class="absolute inset-0 z-0 opacity-5 pointer-events-none bg-cover bg-center" 
+         style="background-image: url('https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%);">
     </div>
 
     <div class="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
