@@ -2,7 +2,6 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <!-- ล็อคไม่ให้หน้าจอบนมือถือขยายหรือซูมเองเวลาพิมพ์ -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>กมลพาณิช - รายการสินค้าและโปรโมชั่น</title>
   
@@ -20,19 +19,18 @@
 <body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between">
 
   <div>
-    <!-- Header พร้อมภาพโกดังสินค้าแบบโปร่งแสงมากๆ (opacity-8) -->
+    <!-- Header พร้อมภาพโกดังสินค้าโปร่งแสง -->
     <header class="relative w-full py-10 md:py-16 px-4 overflow-hidden border-b border-emerald-900/40 text-center">
-     <!-- ภาพพื้นหลังโกดังสินค้า (Warehouse) โปร่งแสงจางๆ -->
      <div class="absolute inset-0 z-0 opacity-8 pointer-events-none bg-cover bg-center" 
           style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%) contrast(110%);">
      </div>
      <div class="absolute inset-0 bg-gradient-to-b from-[#0a1f1a]/80 via-[#0a1f1a]/60 to-[#0a1f1a] z-0"></div>
 
      <div class="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
-      <div class="mb-3 text-[#c9a84c] p-3 bg-emerald-950/80 rounded-2xl border border-emerald-700/40 shadow-xl backdrop-blur-sm">
+      <div class="mb-3 text-[#c9a84c] p-3 bg-emerald-950/80 rounded-2xl border border-emerald-700/40 shadow-xl backdrop-blur-sm cursor-pointer" onclick="showCategoryOverview()">
        <i data-lucide="shopping-cart" class="w-10 h-10 md:w-14 md:h-14"></i>
       </div>
-      <h1 class="text-3xl md:text-6xl font-extrabold text-white mb-2 drop-shadow-md">กมลพาณิช</h1>
+      <h1 class="text-3xl md:text-6xl font-extrabold text-white mb-2 drop-shadow-md cursor-pointer" onclick="showCategoryOverview()">กมลพาณิช</h1>
       <p class="text-amber-300 font-medium text-base md:text-xl mb-6 drop-shadow">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
       
       <div class="flex flex-wrap justify-center gap-3">
@@ -47,7 +45,7 @@
     </header>
 
     <!-- Promotions Section -->
-    <section class="w-full bg-[#0d2419] py-10 px-4 border-b border-emerald-900/30">
+    <section class="w-full bg-[#0d2419] py-8 px-4 border-b border-emerald-900/30">
      <div class="max-w-6xl mx-auto">
       <div class="flex justify-between items-center mb-6">
         <div>
@@ -60,9 +58,8 @@
         </button>
       </div>
 
-      <!-- Promo Grid -->
       <div id="promo-list" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
+        <div class="col-span-full text-center py-6 text-gray-400 flex flex-col items-center gap-2">
           <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-amber-400"></i>
           <span>กำลังโหลดข้อมูลโปรโมชั่น...</span>
         </div>
@@ -73,10 +70,12 @@
     <!-- Products Section -->
     <section class="w-full bg-[#0f2920] py-10 px-4">
      <div class="max-w-6xl mx-auto">
+      
+      <!-- Top Action Bar -->
       <div class="flex justify-between items-center mb-6">
-        <div>
+        <div id="section-title-container">
           <h2 class="text-xl md:text-2xl font-bold text-amber-400 flex items-center gap-2">
-            <i data-lucide="layout-grid" class="w-5 h-5"></i> แคตตาล็อกสินค้า
+            <i data-lucide="layout-grid" class="w-5 h-5"></i> หมวดหมู่สินค้า
           </h2>
         </div>
         <button onclick="openModal('modal-product')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
@@ -84,28 +83,76 @@
         </button>
       </div>
 
-      <!-- Category Filter Buttons -->
-      <div class="flex flex-wrap gap-2 mb-6 border-b border-emerald-900/60 pb-4">
-        <button id="btn-cat-all" onclick="filterCat('all')" class="cat-btn bg-emerald-700 text-amber-300 px-3.5 py-1.5 rounded-lg text-xs font-semibold">ทั้งหมด</button>
-        <button id="btn-cat-อุปโภคบริโภค" onclick="filterCat('อุปโภคบริโภค')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าอุปโภค บริโภค</button>
-        <button id="btn-cat-เบ็ดเตล็ด" onclick="filterCat('เบ็ดเตล็ด')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าเบ็ดเตล็ด</button>
-        <button id="btn-cat-บรรจุภัณฑ์" onclick="filterCat('บรรจุภัณฑ์')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าบรรจุภัณฑ์</button>
-        <button id="btn-cat-ถุงพลาสติก" onclick="filterCat('ถุงพลาสติก')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">ถุงพลาสติก</button>
+      <!-- VIEW 1: หน้าหลักแสดงการ์ดหมวดหมู่ 4 แบบ -->
+      <div id="category-overview-view" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+        
+        <!-- หมวดที่ 1 -->
+        <div onclick="selectCategory('อุปโภคบริโภค')" class="bg-[#122a22] border border-emerald-700/50 hover:border-amber-400/80 rounded-2xl p-6 text-center cursor-pointer card-hover flex flex-col items-center justify-center gap-3 group">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-900/60 border border-emerald-600/40 flex items-center justify-center text-amber-400 group-hover:scale-110 transition">
+            <i data-lucide="shopping-bag" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white group-hover:text-amber-300 transition">สินค้าอุปโภค บริโภค</h3>
+            <p class="text-xs text-gray-400 mt-1">คลิกเพื่อเข้าดูสินค้า</p>
+          </div>
+        </div>
+
+        <!-- หมวดที่ 2 -->
+        <div onclick="selectCategory('เบ็ดเตล็ด')" class="bg-[#122a22] border border-emerald-700/50 hover:border-amber-400/80 rounded-2xl p-6 text-center cursor-pointer card-hover flex flex-col items-center justify-center gap-3 group">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-900/60 border border-emerald-600/40 flex items-center justify-center text-amber-400 group-hover:scale-110 transition">
+            <i data-lucide="boxes" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white group-hover:text-amber-300 transition">สินค้าเบ็ดเตล็ด</h3>
+            <p class="text-xs text-gray-400 mt-1">คลิกเพื่อเข้าดูสินค้า</p>
+          </div>
+        </div>
+
+        <!-- หมวดที่ 3 -->
+        <div onclick="selectCategory('บรรจุภัณฑ์')" class="bg-[#122a22] border border-emerald-700/50 hover:border-amber-400/80 rounded-2xl p-6 text-center cursor-pointer card-hover flex flex-col items-center justify-center gap-3 group">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-900/60 border border-emerald-600/40 flex items-center justify-center text-amber-400 group-hover:scale-110 transition">
+            <i data-lucide="package" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white group-hover:text-amber-300 transition">สินค้าบรรจุภัณฑ์</h3>
+            <p class="text-xs text-gray-400 mt-1">คลิกเพื่อเข้าดูสินค้า</p>
+          </div>
+        </div>
+
+        <!-- หมวดที่ 4 -->
+        <div onclick="selectCategory('ถุงพลาสติก')" class="bg-[#122a22] border border-emerald-700/50 hover:border-amber-400/80 rounded-2xl p-6 text-center cursor-pointer card-hover flex flex-col items-center justify-center gap-3 group">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-900/60 border border-emerald-600/40 flex items-center justify-center text-amber-400 group-hover:scale-110 transition">
+            <i data-lucide="layers" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white group-hover:text-amber-300 transition">ถุงพลาสติก</h3>
+            <p class="text-xs text-gray-400 mt-1">คลิกเพื่อเข้าดูสินค้า</p>
+          </div>
+        </div>
+
       </div>
 
-      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
-          <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-emerald-400"></i>
-          <span>กำลังโหลดรายการสินค้า...</span>
+      <!-- VIEW 2: หน้าแสดงรายการสินค้าตามหมวดหมู่ที่เลือก (เปิดซ่อนไว้ตั้งต้น) -->
+      <div id="category-detail-view" class="hidden">
+        <!-- ปุ่มย้อนกลับ -->
+        <div class="mb-5 flex items-center justify-between border-b border-emerald-900/60 pb-3">
+          <button onclick="showCategoryOverview()" class="bg-emerald-900/80 hover:bg-emerald-800 text-amber-300 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-2 border border-emerald-700/50 transition shadow">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> ย้อนกลับไปหน้าหมวดหมู่
+          </button>
+          <span id="current-category-badge" class="text-xs text-gray-300 bg-emerald-950 px-3 py-1 rounded-full border border-emerald-800"></span>
+        </div>
+
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <!-- โหลดสินค้าที่นี่ -->
         </div>
       </div>
+
      </div>
     </section>
   </div>
 
-  <!-- Footer Section พร้อมภาพโกดังโปร่งแสงแบบบางเบา (opacity-5) -->
+  <!-- Footer Section -->
   <footer class="relative w-full bg-[#061512] border-t border-emerald-900/60 py-10 px-4 mt-10 overflow-hidden">
-    <!-- ภาพพื้นหลังโกดังสินค้า โปร่งแสงบางเบามาก -->
     <div class="absolute inset-0 z-0 opacity-5 pointer-events-none bg-cover bg-center" 
          style="background-image: url('https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%);">
     </div>
@@ -122,7 +169,6 @@
       </div>
 
       <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-        <!-- ปุ่มโทรศัพท์ -->
         <a href="tel:0812345678" class="bg-[#122a22]/90 hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition shadow-lg backdrop-blur-sm">
           <div class="p-2 bg-emerald-800/60 rounded-lg text-amber-400">
             <i data-lucide="phone-call" class="w-4 h-4"></i>
@@ -133,7 +179,6 @@
           </div>
         </a>
 
-        <!-- ปุ่มพิกัด Google Maps -->
         <a href="https://maps.app.goo.gl/CAakXKi17CUUnvnG6" target="_blank" class="bg-[#122a22]/90 hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition shadow-lg backdrop-blur-sm">
           <div class="p-2 bg-emerald-800/60 rounded-lg text-red-400">
             <i data-lucide="map-pin" class="w-4 h-4"></i>
@@ -215,7 +260,7 @@
 
     let allPromotions = [];
     let allProducts = [];
-    let currentCat = 'all';
+    let selectedCategory = '';
 
     document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
@@ -231,7 +276,6 @@
         allProducts = data.products || [];
 
         renderPromotions();
-        renderProducts();
       } catch (err) {
         console.error("Load error:", err);
       }
@@ -242,7 +286,7 @@
       container.innerHTML = "";
 
       if (allPromotions.length === 0) {
-        container.innerHTML = `<p class="text-gray-400 col-span-full text-center py-8 bg-[#122a22]/40 rounded-xl">ไม่มีโปรโมชั่นในขณะนี้</p>`;
+        container.innerHTML = `<p class="text-gray-400 col-span-full text-center py-6 bg-[#122a22]/40 rounded-xl text-xs">ไม่มีโปรโมชั่นในขณะนี้</p>`;
         return;
       }
 
@@ -250,7 +294,7 @@
         const img = p.imageUrl || 'https://via.placeholder.com/600x300?text=No+Promotion+Image';
         container.innerHTML += `
           <div id="promo-card-${p.id}" class="bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-xl">
-            <div class="relative w-full h-52 sm:h-60 bg-black overflow-hidden">
+            <div class="relative w-full h-48 sm:h-56 bg-black overflow-hidden">
               <img src="${img}" loading="lazy" class="w-full h-full object-contain bg-black/40">
               <span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full shadow">PROMOTION</span>
             </div>
@@ -272,16 +316,37 @@
       lucide.createIcons();
     }
 
-    function renderProducts() {
+    // ฟังก์ชันเลือกว่าจะดูสินค้าหมวดไหน
+    function selectCategory(cat) {
+      selectedCategory = cat;
+      
+      // สลับหน้า View
+      document.getElementById("category-overview-view").classList.add("hidden");
+      document.getElementById("category-detail-view").classList.remove("hidden");
+      
+      document.getElementById("current-category-badge").innerText = `หมวดหมู่: ${cat}`;
+
+      renderProductsByCategory();
+      
+      // เลื่อนหน้าจอมาที่ส่วนสินค้าอย่างนุ่มนวล
+      document.getElementById("category-detail-view").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ฟังก์ชันย้อนกลับไปหน้าการ์ดหมวดหมู่หลัก
+    function showCategoryOverview() {
+      selectedCategory = '';
+      document.getElementById("category-detail-view").classList.add("hidden");
+      document.getElementById("category-overview-view").classList.remove("hidden");
+    }
+
+    function renderProductsByCategory() {
       const container = document.getElementById("product-grid");
       container.innerHTML = "";
 
-      const filtered = currentCat === 'all' 
-        ? allProducts 
-        : allProducts.filter(p => p.category === currentCat);
+      const filtered = allProducts.filter(p => p.category === selectedCategory);
 
       if (filtered.length === 0) {
-        container.innerHTML = `<p class="text-gray-400 col-span-full text-center py-8 bg-[#122a22]/40 rounded-xl">ไม่มีสินค้าในหมวดหมู่นี้</p>`;
+        container.innerHTML = `<p class="text-gray-400 col-span-full text-center py-12 bg-[#122a22]/40 rounded-xl">ยังไม่มีสินค้าในหมวดหมู่ "${selectedCategory}"</p>`;
         return;
       }
 
@@ -290,7 +355,7 @@
         container.innerHTML += `
           <div id="prod-card-${p.id}" class="bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-lg">
             <div>
-              <div class="relative h-40 w-full bg-slate-900 overflow-hidden">
+              <div class="relative h-44 w-full bg-slate-900 overflow-hidden">
                 <img src="${img}" loading="lazy" class="w-full h-full object-cover">
                 <span class="absolute top-2 left-2 text-[10px] text-amber-300 bg-black/70 px-2 py-0.5 rounded-full font-semibold">${p.category}</span>
               </div>
@@ -308,20 +373,6 @@
         `;
       });
       lucide.createIcons();
-    }
-
-    function filterCat(cat) {
-      currentCat = cat;
-      document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.classList.remove('bg-emerald-700', 'text-amber-300');
-        btn.classList.add('bg-[#122a22]', 'text-gray-300');
-      });
-      const activeBtn = document.getElementById(`btn-cat-${cat}`);
-      if(activeBtn) {
-        activeBtn.classList.remove('bg-[#122a22]', 'text-gray-300');
-        activeBtn.classList.add('bg-emerald-700', 'text-amber-300');
-      }
-      renderProducts();
     }
 
     function compressImage(file, maxWidth = 400, quality = 0.35) {
@@ -415,7 +466,11 @@
         const imageUrl = imageData.fileData || '';
 
         allProducts.unshift({ id: tempId, name, price, category, imageUrl });
-        renderProducts();
+
+        // ถ้ายู่ในหน้ารายการสินค้านั้น ให้รีโหลดทันที
+        if (selectedCategory === category) {
+          renderProductsByCategory();
+        }
 
         closeModal('modal-product');
         e.target.reset();
@@ -436,7 +491,7 @@
           renderPromotions();
         } else {
           allProducts = allProducts.filter(item => String(item.id) !== String(id));
-          renderProducts();
+          renderProductsByCategory();
         }
 
         sendPostData({ action: "delete", sheetName, id });
