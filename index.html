@@ -2,7 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ล็อคไม่ให้หน้าจอบนมือถือขยายหรือซูมเอง -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>กมลพาณิช - รายการสินค้าและโปรโมชั่น</title>
   
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -16,79 +17,131 @@
   </style>
 </head>
 
-<body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900">
+<body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between">
 
-  <!-- Header -->
-  <header class="relative w-full py-12 md:py-20 px-4 overflow-hidden border-b border-emerald-900/40 text-center">
-   <div class="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
-    <div class="mb-3 text-[#c9a84c] p-3 bg-emerald-950/80 rounded-2xl border border-emerald-700/40">
-     <i data-lucide="shopping-cart" class="w-10 h-10 md:w-14 md:h-14"></i>
-    </div>
-    <h1 class="text-3xl md:text-6xl font-extrabold text-white mb-2">กมลพาณิช</h1>
-    <p class="text-amber-300 font-medium text-base md:text-xl mb-6">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
-    
-    <div class="bg-[#c9a84c] text-[#0a1f1a] px-6 py-2 rounded-full font-bold text-xs md:text-sm flex items-center gap-2">
-      <i data-lucide="clock" class="w-4 h-4"></i> เปิดบริการทุกวัน 07.00 - 17.00 น.
-    </div>
-   </div>
-  </header>
-
-  <!-- Promotions Section -->
-  <section class="w-full bg-[#0d2419] py-10 px-4 border-b border-emerald-900/30">
-   <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h2 class="text-xl md:text-2xl font-bold text-amber-400 flex items-center gap-2">
-          <i data-lucide="sparkles" class="w-5 h-5"></i> โปรโมชั่นพิเศษ
-        </h2>
+  <div>
+    <!-- Header -->
+    <header class="relative w-full py-10 md:py-16 px-4 overflow-hidden border-b border-emerald-900/40 text-center">
+     <div class="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
+      <div class="mb-3 text-[#c9a84c] p-3 bg-emerald-950/80 rounded-2xl border border-emerald-700/40">
+       <i data-lucide="shopping-cart" class="w-10 h-10 md:w-14 md:h-14"></i>
       </div>
-      <button onclick="openModal('modal-promo')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
-        <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มโปรโมชั่น
-      </button>
-    </div>
-
-    <div id="promo-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
-        <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-amber-400"></i>
-        <span>กำลังโหลดข้อมูลโปรโมชั่น...</span>
+      <h1 class="text-3xl md:text-6xl font-extrabold text-white mb-2">กมลพาณิช</h1>
+      <p class="text-amber-300 font-medium text-base md:text-xl mb-6">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
+      
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="tel:0812345678" class="bg-[#c9a84c] hover:bg-amber-400 text-[#0a1f1a] px-5 py-2 rounded-full font-bold text-xs md:text-sm flex items-center gap-2 transition shadow-lg">
+          <i data-lucide="phone" class="w-4 h-4"></i> โทรติดต่อเรา
+        </a>
+        <a href="https://maps.app.goo.gl/CAakXKi17CUUnvnG6" target="_blank" class="bg-emerald-800 hover:bg-emerald-700 text-amber-300 border border-emerald-600/50 px-5 py-2 rounded-full font-semibold text-xs md:text-sm flex items-center gap-2 transition shadow-lg">
+          <i data-lucide="map-pin" class="w-4 h-4 text-red-400"></i> แผนที่ร้าน
+        </a>
       </div>
-    </div>
-   </div>
-  </section>
+     </div>
+    </header>
 
-  <!-- Products Section -->
-  <section class="w-full bg-[#0f2920] py-10 px-4">
-   <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h2 class="text-xl md:text-2xl font-bold text-amber-400 flex items-center gap-2">
-          <i data-lucide="layout-grid" class="w-5 h-5"></i> แคตตาล็อกสินค้า
-        </h2>
+    <!-- Promotions Section -->
+    <section class="w-full bg-[#0d2419] py-10 px-4 border-b border-emerald-900/30">
+     <div class="max-w-6xl mx-auto">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold text-amber-400 flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5"></i> โปรโมชั่นพิเศษ
+          </h2>
+        </div>
+        <button onclick="openModal('modal-promo')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มโปรโมชั่น
+        </button>
       </div>
-      <button onclick="openModal('modal-product')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
-        <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มสินค้าใหม่
-      </button>
-    </div>
 
-    <!-- Category Filter Buttons -->
-    <div class="flex flex-wrap gap-2 mb-6 border-b border-emerald-900/60 pb-4">
-      <button id="btn-cat-all" onclick="filterCat('all')" class="cat-btn bg-emerald-700 text-amber-300 px-3.5 py-1.5 rounded-lg text-xs font-semibold">ทั้งหมด</button>
-      <button id="btn-cat-อุปโภคบริโภค" onclick="filterCat('อุปโภคบริโภค')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าอุปโภค บริโภค</button>
-      <button id="btn-cat-เบ็ดเตล็ด" onclick="filterCat('เบ็ดเตล็ด')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าเบ็ดเตล็ด</button>
-      <button id="btn-cat-บรรจุภัณฑ์" onclick="filterCat('บรรจุภัณฑ์')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าบรรจุภัณฑ์</button>
-      <button id="btn-cat-ถุงพลาสติก" onclick="filterCat('ถุงพลาสติก')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">ถุงพลาสติก</button>
-    </div>
-
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-      <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
-        <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-emerald-400"></i>
-        <span>กำลังโหลดรายการสินค้า...</span>
+      <!-- Promo Grid: ปรับการแสดงผลเน้นรูปโปรโมชั่นชัดๆ -->
+      <div id="promo-list" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
+          <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-amber-400"></i>
+          <span>กำลังโหลดข้อมูลโปรโมชั่น...</span>
+        </div>
       </div>
-    </div>
-   </div>
-  </section>
+     </div>
+    </section>
 
-  <!-- Modal Promo -->
+    <!-- Products Section -->
+    <section class="w-full bg-[#0f2920] py-10 px-4">
+     <div class="max-w-6xl mx-auto">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold text-amber-400 flex items-center gap-2">
+            <i data-lucide="layout-grid" class="w-5 h-5"></i> แคตตาล็อกสินค้า
+          </h2>
+        </div>
+        <button onclick="openModal('modal-product')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มสินค้าใหม่
+        </button>
+      </div>
+
+      <!-- Category Filter Buttons -->
+      <div class="flex flex-wrap gap-2 mb-6 border-b border-emerald-900/60 pb-4">
+        <button id="btn-cat-all" onclick="filterCat('all')" class="cat-btn bg-emerald-700 text-amber-300 px-3.5 py-1.5 rounded-lg text-xs font-semibold">ทั้งหมด</button>
+        <button id="btn-cat-อุปโภคบริโภค" onclick="filterCat('อุปโภคบริโภค')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าอุปโภค บริโภค</button>
+        <button id="btn-cat-เบ็ดเตล็ด" onclick="filterCat('เบ็ดเตล็ด')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าเบ็ดเตล็ด</button>
+        <button id="btn-cat-บรรจุภัณฑ์" onclick="filterCat('บรรจุภัณฑ์')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">สินค้าบรรจุภัณฑ์</button>
+        <button id="btn-cat-ถุงพลาสติก" onclick="filterCat('ถุงพลาสติก')" class="cat-btn bg-[#122a22] text-gray-300 px-3.5 py-1.5 rounded-lg text-xs font-medium">ถุงพลาสติก</button>
+      </div>
+
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div class="col-span-full text-center py-10 text-gray-400 flex flex-col items-center gap-2">
+          <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-emerald-400"></i>
+          <span>กำลังโหลดรายการสินค้า...</span>
+        </div>
+      </div>
+     </div>
+    </section>
+  </div>
+
+  <!-- Footer Section (แสดงเบอร์โทรศัพท์ และพิกัด Google Maps) -->
+  <footer class="w-full bg-[#061512] border-t border-emerald-900/60 py-10 px-4 mt-10">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      
+      <div class="text-center md:text-left">
+        <h3 class="text-xl font-bold text-amber-400 flex items-center justify-center md:justify-start gap-2 mb-2">
+          <i data-lucide="store" class="w-5 h-5"></i> ร้านกมลพาณิช
+        </h3>
+        <p class="text-xs text-gray-400 max-w-md">จำหน่ายสินค้าอุปโภค-บริโภค บรรจุภัณฑ์ และสินค้าเบ็ดเตล็ด ราคาย่อมเยา ปลีก-ส่ง</p>
+        <p class="text-xs text-amber-300/80 mt-1 flex items-center justify-center md:justify-start gap-1">
+          <i data-lucide="clock" class="w-3.5 h-3.5"></i> เปิดบริการทุกวัน 07.00 - 17.00 น.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <!-- ปุ่มโทรศัพท์ (สามารถเปลี่ยนเบอร์โทรใน href="tel:0812345678" ได้ตามต้องการ) -->
+        <a href="tel:0812345678" class="bg-[#122a22] hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition">
+          <div class="p-2 bg-emerald-800/60 rounded-lg text-amber-400">
+            <i data-lucide="phone-call" class="w-4 h-4"></i>
+          </div>
+          <div class="text-left">
+            <div class="text-[10px] text-gray-400">เบอร์โทรศัพท์ติดต่อ</div>
+            <div class="font-bold text-amber-300 text-sm">081-234-5678</div>
+          </div>
+        </a>
+
+        <!-- ปุ่มพิกัด Google Maps -->
+        <a href="https://maps.app.goo.gl/CAakXKi17CUUnvnG6" target="_blank" class="bg-[#122a22] hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition">
+          <div class="p-2 bg-emerald-800/60 rounded-lg text-red-400">
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+          </div>
+          <div class="text-left">
+            <div class="text-[10px] text-gray-400">พิกัดแผนที่ร้าน</div>
+            <div class="font-bold text-emerald-400 text-sm">ดูตำแหน่งบน Google Maps</div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+    <div class="max-w-6xl mx-auto border-t border-emerald-950 mt-8 pt-4 text-center text-[11px] text-gray-500">
+      © กมลพาณิช - สงวนลิขสิทธิ์
+    </div>
+  </footer>
+
+  <!-- Modal Promo (ปรับ font-size ใน input เป็น text-base เพื่อแก้ปัญหาหน้าจอมือถือขยายเอง) -->
   <div id="modal-promo" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-5 w-full max-w-md shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-emerald-800">
@@ -98,11 +151,11 @@
       <form id="form-promo" class="space-y-3">
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">หัวข้อโปรโมชั่น</label>
-          <input type="text" id="promo-title" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+          <input type="text" id="promo-title" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-base md:text-xs text-white focus:outline-none focus:border-amber-400">
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">รายละเอียด</label>
-          <textarea id="promo-desc" rows="2" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
+          <textarea id="promo-desc" rows="2" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-base md:text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">รูปภาพโปรโมชั่น</label>
@@ -113,7 +166,7 @@
     </div>
   </div>
 
-  <!-- Modal Product -->
+  <!-- Modal Product (ปรับ font-size ใน input เป็น text-base เพื่อแก้ปัญหาหน้าจอมือถือขยายเอง) -->
   <div id="modal-product" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-5 w-full max-w-md shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-emerald-800">
@@ -123,11 +176,11 @@
       <form id="form-product" class="space-y-3">
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">ชื่อสินค้า</label>
-          <input type="text" id="prod-name" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
+          <input type="text" id="prod-name" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-base md:text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">หมวดหมู่</label>
-          <select id="prod-cat" class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+          <select id="prod-cat" class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-base md:text-xs text-white focus:outline-none">
             <option value="อุปโภคบริโภค">สินค้าอุปโภค บริโภค</option>
             <option value="เบ็ดเตล็ด">สินค้าเบ็ดเตล็ด</option>
             <option value="บรรจุภัณฑ์">สินค้าบรรจุภัณฑ์</option>
@@ -136,7 +189,7 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">ราคา (บาท)</label>
-          <input type="number" id="prod-price" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+          <input type="number" id="prod-price" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-base md:text-xs text-white focus:outline-none">
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">รูปภาพสินค้า</label>
@@ -174,25 +227,34 @@
       }
     }
 
+    // วาดโปรโมชั่นแบบเน้นรูปภาพชัดๆ ตัวหนังสือไม่บดบังรูป
     function renderPromotions() {
       const container = document.getElementById("promo-list");
       container.innerHTML = "";
 
       if (allPromotions.length === 0) {
-        container.innerHTML = `<p class="text-gray-400 col-span-2 text-center py-8 bg-[#122a22]/40 rounded-xl">ไม่มีโปรโมชั่น</p>`;
+        container.innerHTML = `<p class="text-gray-400 col-span-full text-center py-8 bg-[#122a22]/40 rounded-xl">ไม่มีโปรโมชั่นในขณะนี้</p>`;
         return;
       }
 
       allPromotions.forEach(p => {
-        const img = p.imageUrl || 'https://via.placeholder.com/400x200?text=No+Image';
+        const img = p.imageUrl || 'https://via.placeholder.com/600x300?text=No+Promotion+Image';
         container.innerHTML += `
-          <div id="promo-card-${p.id}" class="relative rounded-2xl overflow-hidden card-hover h-56 bg-[#122a22] border border-emerald-800/40 shadow-xl group">
-            <img src="${img}" loading="lazy" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5">
-              <h3 class="text-lg font-bold text-amber-300">${p.title}</h3>
-              <p class="text-xs text-gray-200 mt-1 line-clamp-2">${p.desc}</p>
-              <div class="mt-3">
-                <button onclick="deleteItem('Promotions', '${p.id}')" class="bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-lg transition flex items-center gap-1">
+          <div id="promo-card-${p.id}" class="bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-xl">
+            <!-- แสดงรูปภาพโปรโมชั่นเต็มๆ ตา ชัดเจน -->
+            <div class="relative w-full h-52 sm:h-60 bg-black overflow-hidden">
+              <img src="${img}" loading="lazy" class="w-full h-full object-contain bg-black/40">
+              <span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full shadow">PROMOTION</span>
+            </div>
+            
+            <!-- ส่วนข้อความสั้นๆ ด้านล่างภาพ -->
+            <div class="p-4 bg-[#122a22] border-t border-emerald-900/50 flex flex-col justify-between flex-1">
+              <div>
+                <h3 class="text-base font-bold text-amber-300 line-clamp-1">${p.title}</h3>
+                <p class="text-xs text-gray-300 mt-1 line-clamp-2">${p.desc}</p>
+              </div>
+              <div class="mt-4 pt-2 border-t border-emerald-900/40 flex justify-end">
+                <button onclick="deleteItem('Promotions', '${p.id}')" class="bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/30 text-xs px-3 py-1.5 rounded-lg transition flex items-center gap-1">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> ลบโปรโมชั่น
                 </button>
               </div>
@@ -255,8 +317,8 @@
       renderProducts();
     }
 
-    // บีบอัดภาพให้อยู่ในขนาด 15 - 25 KB ส่งไวกว่าเดิม 10 เท่า
-    function compressImage(file, maxWidth = 380, quality = 0.35) {
+    // บีบอัดภาพให้อยู่ในขนาดเล็กพิเศษ 15 - 25 KB ส่งไว ไม่ค้าง
+    function compressImage(file, maxWidth = 400, quality = 0.35) {
       return new Promise((resolve) => {
         if (!file) return resolve({ fileData: null, fileName: null });
 
@@ -298,7 +360,7 @@
       });
     }
 
-    // Submit Promo (เด้งขึ้นทันที)
+    // Submit Promo
     document.getElementById("form-promo").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("btn-submit-promo");
@@ -329,7 +391,7 @@
       }
     });
 
-    // Submit Product (เด้งขึ้นทันที)
+    // Submit Product
     document.getElementById("form-product").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("btn-submit-prod");
@@ -361,7 +423,7 @@
       }
     });
 
-    // ลบรายการแล้วหายไปจากหน้าจอทันที ไม่ต้องรีเฟรช
+    // ลบแล้วหายทันทีบนหน้าจอ
     async function deleteItem(sheetName, id) {
       if (confirm("ยืนยันการลบรายการนี้?")) {
         if (sheetName === "Promotions") {
