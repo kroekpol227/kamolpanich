@@ -17,6 +17,17 @@
     /* ซ่อน Scrollbar ของ Carousel */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Skeleton Loading Animation สำหรับเน็ตช้า */
+    .img-skeleton {
+      background: linear-gradient(90deg, #122a22 25%, #1a3a2f 50%, #122a22 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
   </style>
 </head>
 
@@ -26,11 +37,11 @@
     <!-- Header -->
     <header class="relative w-full py-10 md:py-16 px-4 overflow-hidden border-b border-emerald-900/40 text-center">
      <div class="absolute inset-0 z-0 opacity-8 pointer-events-none bg-cover bg-center" 
-          style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%) contrast(110%);">
+          style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop'); filter: grayscale(100%) contrast(110%);">
      </div>
      <div class="absolute inset-0 bg-gradient-to-b from-[#0a1f1a]/80 via-[#0a1f1a]/60 to-[#0a1f1a] z-0"></div>
 
-     <!-- ปุ่มล๊อกอิน Admin ลับ (อยู่มุมขวาบน) -->
+     <!-- ปุ่มล๊อกอิน Admin ลับ -->
      <div class="absolute top-4 right-4 z-20">
         <button id="admin-status-btn" onclick="handleAdminToggle()" class="bg-emerald-950/60 hover:bg-emerald-900 text-gray-400 border border-emerald-800/50 p-2 rounded-full backdrop-blur-sm transition">
           <i id="admin-icon" data-lucide="lock" class="w-4 h-4"></i>
@@ -42,7 +53,6 @@
        <i data-lucide="shopping-cart" class="w-10 h-10 md:w-14 md:h-14"></i>
       </div>
       
-      <!-- กดที่ชื่อร้าน 5 ครั้งเพื่อเข้าโหมดเจ้าของร้านได้เช่นกัน -->
       <h1 onclick="handleTitleClick()" class="text-3xl md:text-6xl font-extrabold text-white mb-2 drop-shadow-md cursor-pointer select-none">กมลพาณิช</h1>
       <p class="text-amber-300 font-medium text-base md:text-xl mb-6 drop-shadow">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
       
@@ -57,7 +67,7 @@
      </div>
     </header>
 
-    <!-- Promotions Section (Auto-scroll Carousel) -->
+    <!-- Promotions Section -->
     <section class="w-full bg-[#0d2419] py-8 px-4 border-b border-emerald-900/30">
      <div class="max-w-6xl mx-auto">
       <div class="flex justify-between items-center mb-6">
@@ -66,25 +76,21 @@
             <i data-lucide="sparkles" class="w-5 h-5"></i> โปรโมชั่นพิเศษ
           </h2>
         </div>
-        <!-- ปุ่มเพิ่มโปรโมชั่น -->
         <button onclick="openModal('modal-promo')" class="admin-only hidden bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
           <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มโปรโมชั่น
         </button>
       </div>
 
-      <!-- Container สำหรับ Slider / Carousel -->
+      <!-- Container Carousel -->
       <div class="relative group" onmouseenter="pauseAutoSlide()" onmouseleave="startAutoSlide()">
-        <!-- ปุ่มกดเลื่อนซ้าย -->
         <button onclick="prevPromo()" class="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-amber-500 hover:text-slate-900 text-white p-2 md:p-3 rounded-full backdrop-blur-md border border-white/20 transition shadow-lg opacity-80 group-hover:opacity-100">
           <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i>
         </button>
 
-        <!-- ปุ่มกดเลื่อนขวา -->
         <button onclick="nextPromo()" class="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-amber-500 hover:text-slate-900 text-white p-2 md:p-3 rounded-full backdrop-blur-md border border-white/20 transition shadow-lg opacity-80 group-hover:opacity-100">
           <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
         </button>
 
-        <!-- Track แสดงรายการโปรโมชั่น -->
         <div id="promo-list" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-4 py-2">
           <div class="w-full text-center py-8 text-gray-400 flex flex-col items-center gap-2">
             <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-amber-400"></i>
@@ -92,7 +98,6 @@
           </div>
         </div>
 
-        <!-- Indicators (จุดไข่ปลาบอกตำแหน่งสไลด์) -->
         <div id="promo-dots" class="flex justify-center gap-2 mt-4"></div>
       </div>
 
@@ -109,13 +114,12 @@
             <i data-lucide="layout-grid" class="w-5 h-5"></i> หมวดหมู่สินค้า
           </h2>
         </div>
-        <!-- ปุ่มเพิ่มสินค้า -->
         <button onclick="openModal('modal-product')" class="admin-only hidden bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
           <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มสินค้าใหม่
         </button>
       </div>
 
-      <!-- VIEW 1: หน้าหมวดหมู่ 4 ปุ่มหลัก -->
+      <!-- VIEW 1: หน้าหมวดหมู่ -->
       <div id="category-overview-view" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
         <div onclick="selectCategory('อุปโภคบริโภค')" class="bg-[#122a22] border border-emerald-700/50 hover:border-amber-400/80 rounded-2xl p-6 text-center cursor-pointer card-hover flex flex-col items-center justify-center gap-3 group">
           <div class="w-16 h-16 rounded-2xl bg-emerald-900/60 border border-emerald-600/40 flex items-center justify-center text-amber-400 group-hover:scale-110 transition">
@@ -168,7 +172,6 @@
         </div>
 
         <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          <!-- โหลดรายการสินค้าที่นี่ -->
         </div>
       </div>
 
@@ -252,7 +255,6 @@
 
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygaYUXxWuoc87C_ZtdOpZ7GyhBOJownFVEdwgck3WfWPzENDP7BEagHHLKZmVbAHYfhg/exec";
-    
     const ADMIN_PASSWORD = "1234"; 
 
     let allPromotions = [];
@@ -262,17 +264,12 @@
     let isAdmin = false;
     let titleClickCount = 0;
     
-    // Auto Slide Control Variables
     let currentPromoIndex = 0;
     let autoSlideInterval = null;
 
     document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
-      
-      if (localStorage.getItem("kamon_admin_mode") === "true") {
-        isAdmin = true;
-      }
-      
+      if (localStorage.getItem("kamon_admin_mode") === "true") isAdmin = true;
       updateAdminUI();
       loadData();
     });
@@ -344,7 +341,7 @@
       }
     }
 
-    /* --- ส่วนระบบ Carousel สไลด์โปรโมชั่นแบบอัตโนมัติ --- */
+    /* --- Carousel Promotions --- */
     function renderPromotions() {
       const container = document.getElementById("promo-list");
       const dotsContainer = document.getElementById("promo-dots");
@@ -358,15 +355,16 @@
       }
 
       allPromotions.forEach((p, index) => {
-        const img = p.imageUrl || 'https://via.placeholder.com/800x400?text=No+Promotion+Image';
+        const img = p.imageUrl || 'https://via.placeholder.com/600x300?text=No+Promotion+Image';
+        // ภาพแรกให้เร่งโหลด (High priority) ภาพถัดๆไปใช้ lazy load
+        const loadAttr = index === 0 ? 'fetchpriority="high"' : 'loading="lazy"';
         
-        // แต่ละการ์ดโปรโมชั่นถูกกำหนดให้ความกว้าง 100% หรือ 50% ตามขนาดหน้าจอ (w-full / sm:w-[calc(50%-8px)])
         container.innerHTML += `
           <div id="promo-card-${index}" class="snap-start shrink-0 w-full sm:w-[calc(50%-8px)] bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-xl">
-            <!-- กำหนดขนาดภาพด้วย w-full และ h-52 ถึง h-64 ให้ได้อัตราส่วน W:H ที่สวยงาม -->
-            <div class="relative w-full h-52 sm:h-60 bg-black/50 overflow-hidden">
-              <img src="${img}" loading="lazy" class="w-full h-full object-cover">
-              <span class="absolute top-3 left-3 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2.5 py-1 rounded-full shadow">PROMOTION</span>
+            <!-- img-skeleton ป้องกันจอดำขณะรอโหลดรูป -->
+            <div class="relative w-full h-52 sm:h-60 img-skeleton overflow-hidden">
+              <img src="${img}" ${loadAttr} class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="this.classList.remove('opacity-0')">
+              <span class="absolute top-3 left-3 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2.5 py-1 rounded-full shadow z-10">PROMOTION</span>
             </div>
             
             <div class="p-4 bg-[#122a22] border-t border-emerald-900/50 flex flex-col justify-between flex-1">
@@ -383,7 +381,6 @@
           </div>
         `;
 
-        // สร้าง Dots ตัวชี้ตำแหน่ง
         dotsContainer.innerHTML += `
           <button onclick="goToPromo(${index})" class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === 0 ? 'bg-amber-400 w-6' : 'bg-emerald-800 hover:bg-emerald-600'}"></button>
         `;
@@ -397,7 +394,6 @@
     function scrollToPromoIndex(index) {
       const container = document.getElementById("promo-list");
       const targetCard = document.getElementById(`promo-card-${index}`);
-      
       if (targetCard && container) {
         container.scrollTo({
           left: targetCard.offsetLeft - container.offsetLeft,
@@ -410,11 +406,9 @@
     function updateDots(activeIndex) {
       const dots = document.querySelectorAll("#promo-dots button");
       dots.forEach((dot, idx) => {
-        if (idx === activeIndex) {
-          dot.className = "w-6 h-2.5 rounded-full bg-amber-400 transition-all duration-300";
-        } else {
-          dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-800 hover:bg-emerald-600 transition-all duration-300";
-        }
+        dot.className = (idx === activeIndex) 
+          ? "w-6 h-2.5 rounded-full bg-amber-400 transition-all duration-300"
+          : "w-2.5 h-2.5 rounded-full bg-emerald-800 hover:bg-emerald-600 transition-all duration-300";
       });
     }
 
@@ -438,10 +432,7 @@
     function startAutoSlide() {
       stopAutoSlide();
       if (allPromotions.length > 1) {
-        // ตั้งเวลาให้สไลด์เปลี่ยนอัตโนมัติไปทางขวา ทุกๆ 3.5 วินาที (3500ms)
-        autoSlideInterval = setInterval(() => {
-          nextPromo();
-        }, 3500);
+        autoSlideInterval = setInterval(() => { nextPromo(); }, 3500);
       }
     }
 
@@ -454,7 +445,7 @@
 
     function pauseAutoSlide() { stopAutoSlide(); }
 
-    /* --- ส่วนรายการสินค้า --- */
+    /* --- Category & Product --- */
     function selectCategory(cat) {
       selectedCategory = cat;
       document.getElementById("category-overview-view").classList.add("hidden");
@@ -498,9 +489,9 @@
         container.innerHTML += `
           <div id="prod-card-${p.id}" class="bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-lg">
             <div>
-              <div class="relative h-44 w-full bg-slate-900 overflow-hidden">
-                <img src="${img}" loading="lazy" class="w-full h-full object-cover">
-                <span class="absolute top-2 left-2 text-[10px] text-amber-300 bg-black/70 px-2 py-0.5 rounded-full font-semibold">${p.category}</span>
+              <div class="relative h-44 w-full img-skeleton overflow-hidden">
+                <img src="${img}" loading="lazy" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="this.classList.remove('opacity-0')">
+                <span class="absolute top-2 left-2 text-[10px] text-amber-300 bg-black/70 px-2 py-0.5 rounded-full font-semibold z-10">${p.category}</span>
               </div>
               <div class="p-3">
                 <h4 class="font-bold text-sm text-white line-clamp-1">${p.name}</h4>
@@ -518,7 +509,8 @@
       lucide.createIcons();
     }
 
-    function compressImage(file, maxWidth = 800, quality = 0.6) {
+    /* --- ปรับปรุงการบีบอัดภาพ (WebP + ขนาดพอดี) --- */
+    function compressImage(file, maxWidth = 600, quality = 0.5) {
       return new Promise((resolve) => {
         if (!file) return resolve({ fileData: null, fileName: null });
 
@@ -540,9 +532,10 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
 
+            // บันทึกเป็น image/webp เพื่อความเล็กและเร็วที่สุด
             resolve({
-              fileData: canvas.toDataURL('image/jpeg', quality),
-              fileName: `img_${Date.now()}.jpg`
+              fileData: canvas.toDataURL('image/webp', quality),
+              fileName: `img_${Date.now()}.webp`
             });
           };
           img.onerror = () => resolve({ fileData: null, fileName: null });
@@ -569,7 +562,8 @@
 
       try {
         const file = document.getElementById("promo-file").files[0];
-        const imageData = await compressImage(file);
+        // ภาพโปรโมชั่นย่อเหลือไม่เกิน 600px
+        const imageData = await compressImage(file, 600, 0.55);
         const tempId = "PR" + Date.now();
 
         const title = document.getElementById("promo-title").value;
@@ -600,7 +594,8 @@
 
       try {
         const file = document.getElementById("prod-file").files[0];
-        const imageData = await compressImage(file);
+        // ภาพสินค้าย่อเหลือไม่เกิน 400px
+        const imageData = await compressImage(file, 400, 0.5);
         const tempId = "PD" + Date.now();
 
         const name = document.getElementById("prod-name").value;
@@ -635,7 +630,6 @@
           allProducts = allProducts.filter(item => String(item.id) !== String(id));
           renderProductsByCategory();
         }
-
         sendPostData({ action: "delete", sheetName, id });
       }
     }
