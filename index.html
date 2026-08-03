@@ -26,11 +26,20 @@
      </div>
      <div class="absolute inset-0 bg-gradient-to-b from-[#0a1f1a]/80 via-[#0a1f1a]/60 to-[#0a1f1a] z-0"></div>
 
+     <!-- ปุ่มล๊อกอิน Admin ลับ (อยู่มุมขวาบน) -->
+     <div class="absolute top-4 right-4 z-20">
+        <button id="admin-status-btn" onclick="handleAdminToggle()" class="bg-emerald-950/60 hover:bg-emerald-900 text-gray-400 border border-emerald-800/50 p-2 rounded-full backdrop-blur-sm transition">
+          <i id="admin-icon" data-lucide="lock" class="w-4 h-4"></i>
+        </button>
+     </div>
+
      <div class="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
       <div class="mb-3 text-[#c9a84c] p-3 bg-emerald-950/80 rounded-2xl border border-emerald-700/40 shadow-xl backdrop-blur-sm cursor-pointer" onclick="showCategoryOverview()">
        <i data-lucide="shopping-cart" class="w-10 h-10 md:w-14 md:h-14"></i>
       </div>
-      <h1 class="text-3xl md:text-6xl font-extrabold text-white mb-2 drop-shadow-md cursor-pointer" onclick="showCategoryOverview()">กมลพาณิช</h1>
+      
+      <!-- กดที่ชื่อร้าน 5 ครั้งเพื่อเข้าโหมดเจ้าของร้านได้เช่นกัน -->
+      <h1 onclick="handleTitleClick()" class="text-3xl md:text-6xl font-extrabold text-white mb-2 drop-shadow-md cursor-pointer select-none">กมลพาณิช</h1>
       <p class="text-amber-300 font-medium text-base md:text-xl mb-6 drop-shadow">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
       
       <div class="flex flex-wrap justify-center gap-3">
@@ -53,7 +62,8 @@
             <i data-lucide="sparkles" class="w-5 h-5"></i> โปรโมชั่นพิเศษ
           </h2>
         </div>
-        <button onclick="openModal('modal-promo')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
+        <!-- ปุ่มเพิ่มโปรโมชั่น (ซ่อนไว้เป็น default ด้วย class admin-only hidden) -->
+        <button onclick="openModal('modal-promo')" class="admin-only hidden bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
           <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มโปรโมชั่น
         </button>
       </div>
@@ -77,14 +87,14 @@
             <i data-lucide="layout-grid" class="w-5 h-5"></i> หมวดหมู่สินค้า
           </h2>
         </div>
-        <button onclick="openModal('modal-product')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
+        <!-- ปุ่มเพิ่มสินค้า (ซ่อนไว้เป็น default ด้วย class admin-only hidden) -->
+        <button onclick="openModal('modal-product')" class="admin-only hidden bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
           <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มสินค้าใหม่
         </button>
       </div>
 
       <!-- VIEW 1: หน้าหมวดหมู่ 4 ปุ่มหลัก -->
       <div id="category-overview-view" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-        
         <div onclick="selectCategory('อุปโภคบริโภค')" class="bg-[#122a22] border border-emerald-700/50 hover:border-amber-400/80 rounded-2xl p-6 text-center cursor-pointer card-hover flex flex-col items-center justify-center gap-3 group">
           <div class="w-16 h-16 rounded-2xl bg-emerald-900/60 border border-emerald-600/40 flex items-center justify-center text-amber-400 group-hover:scale-110 transition">
             <i data-lucide="shopping-bag" class="w-8 h-8"></i>
@@ -124,7 +134,6 @@
             <p class="text-xs text-gray-400 mt-1">คลิกเพื่อเข้าดูสินค้า</p>
           </div>
         </div>
-
       </div>
 
       <!-- VIEW 2: หน้าแสดงรายการสินค้า -->
@@ -147,43 +156,16 @@
 
   <!-- Footer -->
   <footer class="relative w-full bg-[#061512] border-t border-emerald-900/60 py-10 px-4 mt-10 overflow-hidden">
-    <div class="absolute inset-0 z-0 opacity-5 pointer-events-none bg-cover bg-center" 
-         style="background-image: url('https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(100%);">
-    </div>
-
-    <div class="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="text-center md:text-left">
+    <div class="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+      <div>
         <h3 class="text-xl font-bold text-amber-400 flex items-center justify-center md:justify-start gap-2 mb-2">
           <i data-lucide="store" class="w-5 h-5"></i> ร้านกมลพาณิช
         </h3>
         <p class="text-xs text-gray-400 max-w-md">จำหน่ายสินค้าอุปโภค-บริโภค บรรจุภัณฑ์ และสินค้าเบ็ดเตล็ด ราคาย่อมเยา ปลีก-ส่ง</p>
       </div>
-
-      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-        <a href="tel:0812345678" class="bg-[#122a22]/90 hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition shadow-lg backdrop-blur-sm">
-          <div class="p-2 bg-emerald-800/60 rounded-lg text-amber-400">
-            <i data-lucide="phone-call" class="w-4 h-4"></i>
-          </div>
-          <div class="text-left">
-            <div class="text-[10px] text-gray-400">เบอร์โทรศัพท์ติดต่อ</div>
-            <div class="font-bold text-amber-300 text-sm">081-234-5678</div>
-          </div>
-        </a>
-
-        <a href="https://maps.app.goo.gl/CAakXKi17CUUnvnG6" target="_blank" class="bg-[#122a22]/90 hover:bg-emerald-900 border border-emerald-700/50 text-white px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-3 transition shadow-lg backdrop-blur-sm">
-          <div class="p-2 bg-emerald-800/60 rounded-lg text-red-400">
-            <i data-lucide="map-pin" class="w-4 h-4"></i>
-          </div>
-          <div class="text-left">
-            <div class="text-[10px] text-gray-400">พิกัดแผนที่ร้าน</div>
-            <div class="font-bold text-emerald-400 text-sm">ดูตำแหน่งบน Google Maps</div>
-          </div>
-        </a>
+      <div class="text-[11px] text-gray-500">
+        © กมลพาณิช - สงวนลิขสิทธิ์
       </div>
-    </div>
-
-    <div class="relative z-10 max-w-6xl mx-auto border-t border-emerald-950 mt-8 pt-4 text-center text-[11px] text-gray-500">
-      © กมลพาณิช - สงวนลิขสิทธิ์
     </div>
   </footer>
 
@@ -248,16 +230,80 @@
 
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygaYUXxWuoc87C_ZtdOpZ7GyhBOJownFVEdwgck3WfWPzENDP7BEagHHLKZmVbAHYfhg/exec";
+    
+    // ตั้งค่ารหัสผ่าน Admin ตรงนี้ได้ตามต้องการ
+    const ADMIN_PASSWORD = "1234"; 
 
     let allPromotions = [];
     let allProducts = [];
     let selectedCategory = '';
-    let isLoading = true; // Flag เช็คสถานะการดึงข้อมูล
+    let isLoading = true;
+    let isAdmin = false;
+    let titleClickCount = 0;
 
     document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
+      
+      // ตรวจสอบสถานะการเข้าสู่ระบบเก่าที่บันทึกไว้ใน Browser
+      if (localStorage.getItem("kamon_admin_mode") === "true") {
+        isAdmin = true;
+      }
+      
+      updateAdminUI();
       loadData();
     });
+
+    // ฟังชันสลับการแสดงผล Admin/Customer UI
+    function updateAdminUI() {
+      const adminElements = document.querySelectorAll(".admin-only");
+      const adminIcon = document.getElementById("admin-icon");
+      const adminBtn = document.getElementById("admin-status-btn");
+
+      if (isAdmin) {
+        adminElements.forEach(el => el.classList.remove("hidden"));
+        if(adminIcon) adminIcon.setAttribute("data-lucide", "lock-keyhole-open");
+        if(adminBtn) adminBtn.className = "bg-amber-500/20 text-amber-400 border border-amber-500/50 p-2 rounded-full backdrop-blur-sm transition";
+      } else {
+        adminElements.forEach(el => el.classList.add("hidden"));
+        if(adminIcon) adminIcon.setAttribute("data-lucide", "lock");
+        if(adminBtn) adminBtn.className = "bg-emerald-950/60 hover:bg-emerald-900 text-gray-400 border border-emerald-800/50 p-2 rounded-full backdrop-blur-sm transition";
+      }
+      lucide.createIcons();
+    }
+
+    // ฟังก์ชันเข้าสู่ระบบ Admin
+    function handleAdminToggle() {
+      if (isAdmin) {
+        if (confirm("ต้องการออกจากโหมดเจ้าของร้านใช่หรือไม่?")) {
+          isAdmin = false;
+          localStorage.removeItem("kamon_admin_mode");
+          updateAdminUI();
+          renderPromotions();
+          renderProductsByCategory();
+        }
+      } else {
+        const pwd = prompt("กรุณาใส่รหัสผ่านเจ้าของร้านเพื่อจัดการสินค้า:");
+        if (pwd === ADMIN_PASSWORD) {
+          isAdmin = true;
+          localStorage.setItem("kamon_admin_mode", "true");
+          updateAdminUI();
+          renderPromotions();
+          renderProductsByCategory();
+          alert("ยินดีต้อนรับ! เข้าสู่โหมดเจ้าของร้านเรียบร้อยแล้ว");
+        } else if (pwd !== null) {
+          alert("รหัสผ่านไม่ถูกต้อง!");
+        }
+      }
+    }
+
+    // กดที่ชื่อร้าน 5 ครั้งติดกันเพื่อล็อกอิน
+    function handleTitleClick() {
+      titleClickCount++;
+      if (titleClickCount >= 5) {
+        titleClickCount = 0;
+        handleAdminToggle();
+      }
+    }
 
     async function loadData() {
       isLoading = true;
@@ -269,11 +315,7 @@
         allProducts = data.products || [];
 
         renderPromotions();
-        
-        // ถ้าผู้ใช้กดเข้าไปรอในหมวดหมู่ก่อนที่ข้อมูลจะมาถึง ให้สั่งเรนเดอร์ทันทีที่ข้อมูลโหลดเสร็จ
-        if (selectedCategory) {
-          renderProductsByCategory();
-        }
+        if (selectedCategory) renderProductsByCategory();
       } catch (err) {
         console.error("Load error:", err);
       } finally {
@@ -304,7 +346,8 @@
                 <h3 class="text-base font-bold text-amber-300 line-clamp-1">${p.title}</h3>
                 <p class="text-xs text-gray-300 mt-1 line-clamp-2">${p.desc}</p>
               </div>
-              <div class="mt-4 pt-2 border-t border-emerald-900/40 flex justify-end">
+              <!-- ปุ่มลบจะแสดงต่อเมื่ออยู่ใน Admin Mode เท่านั้น -->
+              <div class="admin-only ${isAdmin ? '' : 'hidden'} mt-4 pt-2 border-t border-emerald-900/40 flex justify-end">
                 <button onclick="deleteItem('Promotions', '${p.id}')" class="bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/30 text-xs px-3 py-1.5 rounded-lg transition flex items-center gap-1">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> ลบโปรโมชั่น
                 </button>
@@ -318,7 +361,6 @@
 
     function selectCategory(cat) {
       selectedCategory = cat;
-      
       document.getElementById("category-overview-view").classList.add("hidden");
       document.getElementById("category-detail-view").classList.remove("hidden");
       document.getElementById("current-category-badge").innerText = `หมวดหมู่: ${cat}`;
@@ -336,7 +378,6 @@
     function renderProductsByCategory() {
       const container = document.getElementById("product-grid");
       
-      // กรณีที่ข้อมูลยังดึงจาก Google Script ไม่เสร็จ ให้แสดงสถานะกำลังโหลด
       if (isLoading) {
         container.innerHTML = `
           <div class="col-span-full text-center py-12 text-gray-400 flex flex-col items-center justify-center gap-3">
@@ -370,7 +411,8 @@
                 <p class="text-amber-400 font-extrabold text-base mt-1">${Number(p.price).toLocaleString()} <span class="text-xs text-gray-400 font-normal">บาท</span></p>
               </div>
             </div>
-            <div class="p-3 pt-0">
+            <!-- ปุ่มลบจะแสดงต่อเมื่ออยู่ใน Admin Mode เท่านั้น -->
+            <div class="admin-only ${isAdmin ? '' : 'hidden'} p-3 pt-0">
               <button onclick="deleteItem('Products', '${p.id}')" class="bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/30 text-xs px-3 py-1.5 rounded-lg w-full transition flex items-center justify-center gap-1">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> ลบสินค้า
               </button>
