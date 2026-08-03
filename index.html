@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="th">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>กมลพาณิช - ระบบจัดการสินค้าและโปรโมชั่น</title>
+  
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body { font-family: 'Noto Sans Thai', sans-serif; }
+    .card-hover { transition: transform 0.3s, box-shadow 0.3s; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  </style>
+ </head>
+
+ <body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900">
+
+  <!-- Config Banner -->
+  <div class="bg-amber-500/20 border-b border-amber-500/30 text-amber-200 text-xs py-2 px-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-amber-400"></i>
+        <span><strong>ตั้งค่า Web App URL:</strong> กรอก URL ที่ได้จาก Google Apps Script Deploy เพื่อเชื่อมต่อระบบ</span>
+      </div>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <input type="url" id="script-url-input" placeholder="https://script.google.com/macros/s/.../exec" 
+               class="bg-[#0a1f1a] border border-amber-500/40 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-amber-400 flex-1 sm:w-80">
+        <button onclick="saveScriptUrl()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1 rounded text-xs transition">
+          บันทึก URL
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="relative w-full py-16 md:py-24 px-4 overflow-hidden border-b border-emerald-900/40">
+   <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1920" 
+        class="absolute inset-0 w-full h-full object-cover opacity-35 filter brightness-110 contrast-100">
+   <div class="absolute inset-0 bg-gradient-to-b from-[#0a1f1a]/70 via-[#0d2419]/80 to-[#0a1f1a]"></div>
+
+   <div class="relative z-10 max-w-6xl mx-auto text-center flex flex-col items-center">
+    <div class="mb-4 text-[#c9a84c] drop-shadow-md p-3 bg-emerald-950/60 rounded-2xl border border-emerald-700/40">
+     <i data-lucide="shopping-cart" class="w-12 h-12 md:w-16 md:h-16"></i>
+    </div>
+    <h1 class="text-4xl md:text-7xl font-extrabold tracking-tight text-white mb-2 drop-shadow-lg">กมลพาณิช</h1>
+    <p class="text-amber-300 font-medium text-lg md:text-2xl mb-8 drop-shadow">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
+    
+    <div class="flex flex-wrap justify-center gap-3 md:gap-4 text-xs md:text-sm text-gray-100 bg-[#0a1f1a]/85 backdrop-blur-md px-6 py-3.5 rounded-full border border-emerald-600/50 shadow-2xl mb-6">
+     <span class="flex items-center gap-1.5"><i data-lucide="package" class="w-4 h-4 text-[#c9a84c]"></i> สินค้าครบครัน</span>
+     <span class="flex items-center gap-1.5"><i data-lucide="badge-check" class="w-4 h-4 text-[#c9a84c]"></i> คุณภาพมาตรฐาน</span>
+     <span class="flex items-center gap-1.5"><i data-lucide="wallet" class="w-4 h-4 text-[#c9a84c]"></i> ราคาย่อมเยา</span>
+     <span class="flex items-center gap-1.5"><i data-lucide="truck" class="w-4 h-4 text-[#c9a84c]"></i> บริการจัดส่ง</span>
+    </div>
+
+    <div class="bg-[#c9a84c] text-[#0a1f1a] px-8 py-2.5 rounded-full font-bold text-xs md:text-sm shadow-xl border border-amber-200 flex items-center gap-2">
+      <i data-lucide="clock" class="w-4 h-4"></i> เปิดบริการทุกวัน 07.00 - 17.00 น.
+    </div>
+   </div>
+  </header>
+
+  <!-- Promotions Section -->
+  <section class="w-full bg-[#0d2419] py-12 px-4 border-b border-emerald-900/30">
+   <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold text-amber-400 flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-6 h-6"></i> โปรโมชั่นพิเศษ
+        </h2>
+        <p class="text-gray-400 text-xs md:text-sm mt-1">ข้อเสนอสุดพิเศษประจำเดือน</p>
+      </div>
+      <button onclick="openModal('modal-promo')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-xs md:text-sm flex items-center gap-2 shadow-lg transition transform hover:scale-105">
+        <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มโปรโมชั่น
+      </button>
+    </div>
+
+    <div id="promo-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="col-span-full text-center py-12 text-gray-400 flex flex-col items-center gap-3">
+        <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-amber-400"></i>
+        <span>กำลังโหลดข้อมูลโปรโมชั่น...</span>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- Categories & Catalog Section -->
+  <section class="w-full bg-[#0f2920] py-12 px-4">
+   <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold text-amber-400 flex items-center gap-2">
+          <i data-lucide="layout-grid" class="w-6 h-6"></i> แคตตาล็อกสินค้า
+        </h2>
+        <p class="text-gray-400 text-xs md:text-sm mt-1">รายการสินค้าทั้งหมดแยกตามหมวดหมู่</p>
+      </div>
+      <button onclick="openModal('modal-product')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs md:text-sm flex items-center gap-2 shadow-lg transition transform hover:scale-105 border border-emerald-400/30">
+        <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มสินค้าใหม่
+      </button>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-8 border-b border-emerald-900/60 pb-4">
+      <button id="btn-cat-all" onclick="filterCat('all')" class="cat-btn bg-emerald-700 text-amber-300 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition">ทั้งหมด</button>
+      <button id="btn-cat-อุปโภคบริโภค" onclick="filterCat('อุปโภคบริโภค')" class="cat-btn bg-[#122a22] hover:bg-emerald-800 text-gray-300 px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition">สินค้าอุปโภค บริโภค</button>
+      <button id="btn-cat-เบ็ดเตล็ด" onclick="filterCat('เบ็ดเตล็ด')" class="cat-btn bg-[#122a22] hover:bg-emerald-800 text-gray-300 px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition">สินค้าเบ็ดเตล็ด</button>
+      <button id="btn-cat-บรรจุภัณฑ์" onclick="filterCat('บรรจุภัณฑ์')" class="cat-btn bg-[#122a22] hover:bg-emerald-800 text-gray-300 px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition">สินค้าบรรจุภัณฑ์</button>
+      <button id="btn-cat-ถุงพลาสติก" onclick="filterCat('ถุงพลาสติก')" class="cat-btn bg-[#122a22] hover:bg-emerald-800 text-gray-300 px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition">ถุงพลาสติก</button>
+    </div>
+
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div class="col-span-full text-center py-12 text-gray-400 flex flex-col items-center gap-3">
+        <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-emerald-400"></i>
+        <span>กำลังโหลดรายการสินค้า...</span>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full bg-[#071713] border-t border-emerald-900/40 py-8 px-4 text-center text-xs text-gray-400">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-2">
+      <p>© 2026 กมลพาณิช - สงวนลิขสิทธิ์ระบบจัดการสินค้า</p>
+      <p class="text-gray-500">เชื่อมต่อข้อมูลแบบ Real-time ร่วมกับ Google Sheets & Google Drive</p>
+    </div>
+  </footer>
+
+  <!-- Modal Promo -->
+  <div id="modal-promo" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-6 w-full max-w-md shadow-2xl relative">
+      <div class="flex justify-between items-center mb-5 pb-3 border-b border-emerald-800">
+        <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-5 h-5"></i> เพิ่มโปรโมชั่นใหม่
+        </h3>
+        <button onclick="closeModal('modal-promo')" class="text-gray-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-promo" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">หัวข้อโปรโมชั่น</label>
+          <input type="text" id="promo-title" required placeholder="เช่น ลดราคาต้อนรับเทศกาล" class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">รายละเอียด</label>
+          <textarea id="promo-desc" rows="3" required placeholder="รายละเอียดโปรโมชั่น เงื่อนไขเพิ่มเติม..." class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">เลือกรูปภาพโปรโมชั่น</label>
+          <input type="file" id="promo-file" accept="image/*" class="w-full text-xs text-gray-300 bg-[#0a1f1a] rounded-xl border border-emerald-800 p-2 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-800 file:text-emerald-200 hover:file:bg-emerald-700">
+        </div>
+        <button type="submit" id="btn-submit-promo" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-xl text-xs transition shadow-lg mt-2">
+          บันทึกโปรโมชั่น
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Product -->
+  <div id="modal-product" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-6 w-full max-w-md shadow-2xl relative">
+      <div class="flex justify-between items-center mb-5 pb-3 border-b border-emerald-800">
+        <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+          <i data-lucide="package-plus" class="w-5 h-5"></i> เพิ่มสินค้าใหม่
+        </h3>
+        <button onclick="closeModal('modal-product')" class="text-gray-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-product" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">ชื่อสินค้า</label>
+          <input type="text" id="prod-name" required placeholder="เช่น ถุงพลาสติกหูหิ้ว 8x16 นิ้ว" class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">หมวดหมู่</label>
+          <select id="prod-cat" class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+            <option value="อุปโภคบริโภค">สินค้าอุปโภค บริโภค</option>
+            <option value="เบ็ดเตล็ด">สินค้าเบ็ดเตล็ด</option>
+            <option value="บรรจุภัณฑ์">สินค้าบรรจุภัณฑ์</option>
+            <option value="ถุงพลาสติก">ถุงพลาสติก</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">ราคา (บาท)</label>
+          <input type="number" id="prod-price" required placeholder="0.00" class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">เลือกรูปภาพสินค้า</label>
+          <input type="file" id="prod-file" accept="image/*" class="w-full text-xs text-gray-300 bg-[#0a1f1a] rounded-xl border border-emerald-800 p-2 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-800 file:text-emerald-200 hover:file:bg-emerald-700">
+        </div>
+        <button type="submit" id="btn-submit-prod" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg mt-2">
+          บันทึกสินค้า
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let GOOGLE_SCRIPT_URL = localStorage.getItem("kamonphanich_script_url") || "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const input = document.getElementById("script-url-input");
+      if (GOOGLE_SCRIPT_URL) {
+        input.value = GOOGLE_SCRIPT_URL;
+      }
+      lucide.createIcons();
+      loadData();
+    });
+
+    function saveScriptUrl() {
+      const inputVal = document.getElementById("script-url-input").value.trim();
+      if (!inputVal) {
+        alert("กรุณากรอก Web App URL ของ Google Apps Script");
+        return;
+      }
+      GOOGLE_SCRIPT_URL = inputVal;
+      localStorage.setItem("kamonphanich_script_url", GOOGLE_SCRIPT_URL);
+      alert("บันทึก Web App URL เรียบร้อยแล้ว ระบบกำลังโหลดข้อมูลใหม่...");
+      loadData();
+    }
+
+    let allProducts = [];
+    let currentCat = 'all';
+
+    async function loadData() {
+      const promoContainer = document.getElementById("promo-list");
+      const productContainer = document.getElementById("product-grid");
+
+      if (!GOOGLE_SCRIPT_URL) {
+        const warningHTML = `
+          <div class="col-span-full bg-amber-950/40 border border-amber-600/50 text-amber-200 p-6 rounded-2xl text-center">
+            <i data-lucide="alert-triangle" class="w-8 h-8 text-amber-400 mx-auto mb-2"></i>
+            <p class="font-bold text-sm">ยังไม่ได้ตั้งค่า Google Web App URL</p>
+            <p class="text-xs text-gray-300 mt-1">กรุณากรอก URL ที่ได้จากขั้นตอนการ Deploy Apps Script ในแถบด้านบนสุด แล้วกด "บันทึก URL"</p>
+          </div>
+        `;
+        promoContainer.innerHTML = warningHTML;
+        productContainer.innerHTML = warningHTML;
+        lucide.createIcons();
+        return;
+      }
+
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await res.json();
+        
+        // Render Promotions
+        promoContainer.innerHTML = "";
+        if (!data.promotions || data.promotions.length === 0) {
+          promoContainer.innerHTML = `<p class="text-gray-400 col-span-2 text-center py-10 bg-[#122a22]/50 rounded-2xl border border-emerald-900/40">ยังไม่มีรายการโปรโมชั่นในขณะนี้</p>`;
+        } else {
+          data.promotions.forEach(p => {
+            promoContainer.innerHTML += `
+              <div class="relative rounded-2xl overflow-hidden card-hover h-64 bg-[#122a22] border border-emerald-800/50 shadow-xl group">
+                <img src="${p.imageUrl || 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=600'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent flex flex-col justify-end p-6">
+                  <span class="bg-amber-400/20 text-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full w-max mb-2 border border-amber-400/30">PROMOTION</span>
+                  <h3 class="text-xl font-bold text-amber-300">${p.title}</h3>
+                  <p class="text-xs text-gray-200 mt-1.5 line-clamp-2">${p.desc}</p>
+                  <div class="mt-4 flex justify-between items-center">
+                    <button onclick="deleteItem('promotions', '${p.id}')" class="bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
+                      <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> ลบโปรโมชั่น
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        // Render Products
+        allProducts = data.products || [];
+        renderProducts();
+
+      } catch (err) {
+        console.error(err);
+        const errHTML = `
+          <div class="col-span-full bg-red-950/40 border border-red-600/50 text-red-200 p-6 rounded-2xl text-center">
+            <i data-lucide="alert-circle" class="w-8 h-8 text-red-400 mx-auto mb-2"></i>
+            <p class="font-bold text-sm">ไม่สามารถโหลดข้อมูลจาก Google Sheets ได้</p>
+            <p class="text-xs text-gray-300 mt-1">กรุณาตรวจสอบว่าได้ตั้งค่า 'Who has access' เป็น 'Anyone' ใน Apps Script หรือยัง</p>
+          </div>
+        `;
+        promoContainer.innerHTML = errHTML;
+        productContainer.innerHTML = errHTML;
+        lucide.createIcons();
+      }
+    }
+
+    function renderProducts() {
+      const container = document.getElementById("product-grid");
+      container.innerHTML = "";
+
+      const filtered = currentCat === 'all' 
+        ? allProducts 
+        : allProducts.filter(p => p.category === currentCat);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-gray-400 col-span-full text-center py-12 bg-[#122a22]/50 rounded-2xl border border-emerald-900/40">ไม่พบรายการสินค้าในหมวดหมู่นี้</p>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        container.innerHTML += `
+          <div class="bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-xl">
+            <div>
+              <div class="relative h-48 w-full overflow-hidden bg-slate-900">
+                <img src="${p.imageUrl || 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?q=80&w=400'}" class="w-full h-full object-cover">
+                <span class="absolute top-3 left-3 text-[10px] text-amber-300 bg-[#0a1f1a]/80 backdrop-blur-md px-2.5 py-1 rounded-full font-semibold border border-emerald-600/40">${p.category}</span>
+              </div>
+              <div class="p-4">
+                <h4 class="font-bold text-base text-white line-clamp-1">${p.name}</h4>
+                <p class="text-amber-400 font-extrabold text-lg mt-1">${Number(p.price).toLocaleString()} <span class="text-xs text-gray-400 font-normal">บาท</span></p>
+              </div>
+            </div>
+            <div class="p-4 pt-0 border-t border-emerald-900/30 mt-2">
+              <button onclick="deleteItem('products', '${p.id}')" class="bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/30 text-xs px-3 py-1.5 rounded-lg w-full transition flex items-center justify-center gap-1 mt-2">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> ลบสินค้า
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    function filterCat(cat) {
+      currentCat = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-700', 'text-amber-300');
+        btn.classList.add('bg-[#122a22]', 'text-gray-300');
+      });
+      const activeBtn = document.getElementById(`btn-cat-${cat}`);
+      if(activeBtn) {
+        activeBtn.classList.remove('bg-[#122a22]', 'text-gray-300');
+        activeBtn.classList.add('bg-emerald-700', 'text-amber-300');
+      }
+      renderProducts();
+    }
+
+    const fileToBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+
+    document.getElementById("form-promo").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!GOOGLE_SCRIPT_URL) {
+        alert("กรุณากรอกและบันทึก Web App URL ในแถบด้านบนก่อนครับ");
+        return;
+      }
+      const btn = document.getElementById("btn-submit-promo");
+      btn.disabled = true; btn.innerText = "กำลังบันทึกและอัปโหลดรูป...";
+
+      try {
+        const file = document.getElementById("promo-file").files[0];
+        let fileData = null, fileName = null, mimeType = null;
+        if (file) {
+          fileData = await fileToBase64(file);
+          fileName = file.name;
+          mimeType = file.type;
+        }
+
+        const payload = {
+          action: "addPromotion",
+          title: document.getElementById("promo-title").value,
+          desc: document.getElementById("promo-desc").value,
+          fileData, fileName, mimeType
+        };
+
+        await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+        alert("เพิ่มโปรโมชั่นสำเร็จ!");
+        e.target.reset();
+        closeModal('modal-promo');
+        loadData();
+      } catch (err) {
+        alert("เกิดข้อผิดพลาดในการบันทึก: " + err.toString());
+      } finally {
+        btn.disabled = false; btn.innerText = "บันทึกโปรโมชั่น";
+      }
+    });
+
+    document.getElementById("form-product").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!GOOGLE_SCRIPT_URL) {
+        alert("กรุณากรอกและบันทึก Web App URL ในแถบด้านบนก่อนครับ");
+        return;
+      }
+      const btn = document.getElementById("btn-submit-prod");
+      btn.disabled = true; btn.innerText = "กำลังบันทึกและอัปโหลดรูป...";
+
+      try {
+        const file = document.getElementById("prod-file").files[0];
+        let fileData = null, fileName = null, mimeType = null;
+        if (file) {
+          fileData = await fileToBase64(file);
+          fileName = file.name;
+          mimeType = file.type;
+        }
+
+        const payload = {
+          action: "addProduct",
+          name: document.getElementById("prod-name").value,
+          price: document.getElementById("prod-price").value,
+          category: document.getElementById("prod-cat").value,
+          fileData, fileName, mimeType
+        };
+
+        await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+        alert("เพิ่มสินค้าสำเร็จ!");
+        e.target.reset();
+        closeModal('modal-product');
+        loadData();
+      } catch (err) {
+        alert("เกิดข้อผิดพลาดในการบันทึก: " + err.toString());
+      } finally {
+        btn.disabled = false; btn.innerText = "บันทึกสินค้า";
+      }
+    });
+
+    async function deleteItem(sheetName, id) {
+      if(confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?")) {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify({ action: "delete", sheetName, id })
+          });
+          loadData();
+        } catch (err) {
+          alert("ไม่สามารถลบรายการได้: " + err.toString());
+        }
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+  </script>
+ </body>
+</html>
