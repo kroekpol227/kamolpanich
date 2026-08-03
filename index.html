@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="th">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>กมลพาณิช - ระบบจัดการสินค้าและโปรโมชั่น</title>
@@ -14,9 +14,9 @@
     .card-hover { transition: transform 0.3s, box-shadow 0.3s; }
     .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
   </style>
- </head>
+</head>
 
- <body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900">
+<body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900">
 
   <!-- Config Banner -->
   <div class="bg-amber-500/20 border-b border-amber-500/30 text-amber-200 text-xs py-2 px-4">
@@ -144,7 +144,7 @@
           <textarea id="promo-desc" rows="3" required placeholder="รายละเอียดโปรโมชั่น เงื่อนไขเพิ่มเติม..." class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1.5">เลือกรูปภาพโปรโมชั่น</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">เลือกรูปภาพโปรโมชั่น (รองรับทุกนามสกุล)</label>
           <input type="file" id="promo-file" accept="image/*" class="w-full text-xs text-gray-300 bg-[#0a1f1a] rounded-xl border border-emerald-800 p-2 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-800 file:text-emerald-200 hover:file:bg-emerald-700">
         </div>
         <button type="submit" id="btn-submit-promo" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-xl text-xs transition shadow-lg mt-2">
@@ -182,7 +182,7 @@
           <input type="number" id="prod-price" required placeholder="0.00" class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1.5">เลือกรูปภาพสินค้า</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">เลือกรูปภาพสินค้า (รองรับทุกนามสกุล)</label>
           <input type="file" id="prod-file" accept="image/*" class="w-full text-xs text-gray-300 bg-[#0a1f1a] rounded-xl border border-emerald-800 p-2 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-800 file:text-emerald-200 hover:file:bg-emerald-700">
         </div>
         <button type="submit" id="btn-submit-prod" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg mt-2">
@@ -335,13 +335,54 @@
       renderProducts();
     }
 
-    const fileToBase64 = file => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
+    // ⚡ ฟังก์ชันปรับขนาด บีบอัดรูปภาพผ่าน Canvas ให้รองรับภาพทุกนามสกุล และบีบอัดเหลือขนาดเล็ก ~100-200KB
+    function compressImage(file, maxWidth = 1080, quality = 0.75) {
+      return new Promise((resolve, reject) => {
+        if (!file) return resolve({ fileData: null, fileName: null, mimeType: null });
 
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+
+          img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+
+            // คำนวณรักษาสัดส่วน
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // แปลงเป็น JPG ความละเอียด 75% 
+            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            const rawName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+
+            resolve({
+              fileData: compressedBase64,
+              fileName: `${rawName}_compressed.jpg`,
+              mimeType: 'image/jpeg'
+            });
+          };
+
+          img.onerror = (err) => reject(err);
+        };
+
+        reader.onerror = (err) => reject(err);
+      });
+    }
+
+    // Submit Promotion
     document.getElementById("form-promo").addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!GOOGLE_SCRIPT_URL) {
@@ -349,22 +390,21 @@
         return;
       }
       const btn = document.getElementById("btn-submit-promo");
-      btn.disabled = true; btn.innerText = "กำลังบันทึกและอัปโหลดรูป...";
+      btn.disabled = true; 
+      btn.innerText = "กำลังบีบอัดภาพและบันทึก...";
 
       try {
         const file = document.getElementById("promo-file").files[0];
-        let fileData = null, fileName = null, mimeType = null;
-        if (file) {
-          fileData = await fileToBase64(file);
-          fileName = file.name;
-          mimeType = file.type;
-        }
+        // บีบอัดภาพก่อนส่ง
+        const imageData = await compressImage(file);
 
         const payload = {
           action: "addPromotion",
           title: document.getElementById("promo-title").value,
           desc: document.getElementById("promo-desc").value,
-          fileData, fileName, mimeType
+          fileData: imageData.fileData,
+          fileName: imageData.fileName,
+          mimeType: imageData.mimeType
         };
 
         await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
@@ -375,10 +415,12 @@
       } catch (err) {
         alert("เกิดข้อผิดพลาดในการบันทึก: " + err.toString());
       } finally {
-        btn.disabled = false; btn.innerText = "บันทึกโปรโมชั่น";
+        btn.disabled = false; 
+        btn.innerText = "บันทึกโปรโมชั่น";
       }
     });
 
+    // Submit Product
     document.getElementById("form-product").addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!GOOGLE_SCRIPT_URL) {
@@ -386,23 +428,22 @@
         return;
       }
       const btn = document.getElementById("btn-submit-prod");
-      btn.disabled = true; btn.innerText = "กำลังบันทึกและอัปโหลดรูป...";
+      btn.disabled = true; 
+      btn.innerText = "กำลังบีบอัดภาพและบันทึก...";
 
       try {
         const file = document.getElementById("prod-file").files[0];
-        let fileData = null, fileName = null, mimeType = null;
-        if (file) {
-          fileData = await fileToBase64(file);
-          fileName = file.name;
-          mimeType = file.type;
-        }
+        // บีบอัดภาพก่อนส่ง
+        const imageData = await compressImage(file);
 
         const payload = {
           action: "addProduct",
           name: document.getElementById("prod-name").value,
           price: document.getElementById("prod-price").value,
           category: document.getElementById("prod-cat").value,
-          fileData, fileName, mimeType
+          fileData: imageData.fileData,
+          fileName: imageData.fileName,
+          mimeType: imageData.mimeType
         };
 
         await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
@@ -413,7 +454,8 @@
       } catch (err) {
         alert("เกิดข้อผิดพลาดในการบันทึก: " + err.toString());
       } finally {
-        btn.disabled = false; btn.innerText = "บันทึกสินค้า";
+        btn.disabled = false; 
+        btn.innerText = "บันทึกสินค้า";
       }
     });
 
@@ -434,5 +476,5 @@
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
   </script>
- </body>
+</body>
 </html>
