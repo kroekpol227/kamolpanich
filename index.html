@@ -48,7 +48,6 @@
       will-change: transform;
     }
 
-    /* เมื่อเอาเมาส์วาง หรือแตะค้าง จะหยุดวิ่งทันที */
     .animate-smooth-scroll:hover,
     .animate-smooth-scroll.is-paused {
       animation-play-state: paused !important;
@@ -92,7 +91,7 @@
      </div>
     </header>
 
-    <!-- Promotions Section (แถบภาพสไลด์ วางเมาส์หยุด ปล่อยวิ่งต่อ) -->
+    <!-- Promotions Section -->
     <section class="w-full bg-[#0d2419] py-8 border-b border-emerald-900/30 overflow-hidden">
      <div class="max-w-7xl mx-auto px-4 mb-4 flex justify-between items-center">
         <h2 class="text-xl md:text-2xl font-bold text-amber-400 flex items-center gap-2">
@@ -120,13 +119,19 @@
     <section class="w-full bg-[#0f2920] py-8 px-4">
       <div class="max-w-7xl mx-auto">
         
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
           <h2 class="text-xl md:text-2xl font-bold text-amber-400 flex items-center gap-2">
             <i data-lucide="layout-grid" class="w-5 h-5"></i> หมวดหมู่และรายการสินค้า
           </h2>
-          <button onclick="openModal('modal-product')" class="admin-only hidden bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มสินค้าใหม่
-          </button>
+          <div class="flex gap-2">
+            <!-- ปุ่มจัดการหมวดหมู่สำหรับ Admin -->
+            <button onclick="openModal('modal-manage-cat')" class="admin-only hidden bg-emerald-800 hover:bg-emerald-700 text-amber-300 font-bold px-3 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 border border-emerald-600/50 shadow-lg transition">
+              <i data-lucide="folder-tree" class="w-4 h-4"></i> จัดการหมวดหมู่
+            </button>
+            <button onclick="openModal('modal-product')" class="admin-only hidden bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm flex items-center gap-1.5 shadow-lg transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มสินค้าใหม่
+            </button>
+          </div>
         </div>
 
         <div class="md:hidden mb-4">
@@ -192,6 +197,40 @@
     </div>
   </footer>
 
+  <!-- Modal Admin: เพิ่ม/จัดการหมวดหมู่ -->
+  <div id="modal-manage-cat" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-5 w-full max-w-md shadow-2xl">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-emerald-800">
+        <h3 class="text-base font-bold text-amber-400 flex items-center gap-2"><i data-lucide="folder-plus" class="w-5 h-5"></i> จัดการหมวดหมู่สินค้า</h3>
+        <button onclick="closeModal('modal-manage-cat')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <div class="space-y-4">
+        <!-- เพิ่มหมวดหมู่ -->
+        <div class="bg-[#0a1f1a] p-3 rounded-xl border border-emerald-800">
+          <h4 class="text-xs font-bold text-emerald-400 mb-2">เพิ่มหมวดหมู่ใหม่</h4>
+          <input type="text" id="new-cat-name" placeholder="ชื่อหมวดหมู่ใหม่" class="w-full bg-[#122a22] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none mb-2">
+          
+          <select id="parent-cat-select" class="w-full bg-[#122a22] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none mb-3">
+            <option value="root">-- เป็นหมวดหมู่หลัก (Root) --</option>
+          </select>
+          
+          <button onclick="addNewCategory()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2 rounded-xl text-xs transition">
+            + บันทึกหมวดหมู่
+          </button>
+        </div>
+
+        <!-- รายการหมวดหมู่ที่มีอยู่ -->
+        <div>
+          <h4 class="text-xs font-bold text-gray-300 mb-2">โครงสร้างหมวดหมู่ปัจจุบัน</h4>
+          <div id="cat-manage-tree" class="max-h-60 overflow-y-auto space-y-1 bg-[#0a1f1a] p-3 rounded-xl border border-emerald-800 text-xs">
+            <!-- Render Dynamic -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Admin: เพิ่มโปรโมชั่น -->
   <div id="modal-promo" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-5 w-full max-w-md shadow-2xl">
@@ -230,7 +269,7 @@
           <input type="text" id="prod-name" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">หมวดหมู่ย่อย</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">หมวดหมู่สินค้า</label>
           <select id="prod-subcat" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
           </select>
         </div>
@@ -251,31 +290,17 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygaYUXxWuoc87C_ZtdOpZ7GyhBOJownFVEdwgck3WfWPzENDP7BEagHHLKZmVbAHYfhg/exec";
     const ADMIN_PASSWORD = "1234";
 
-    // SVG Placeholder คุณภาพสูงและขนาดเล็กมาก สำหรับพรีวิวก่อนภาพจริงจะมา
     const PLACEHOLDER_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%2334d399' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='3' width='20' height='14' rx='2' ry='2'/><line x1='8' y1='21' x2='16' y2='21'/><line x1='12' y1='17' x2='12' y2='21'/></svg>";
 
-    const categoryData = [
-      {
-        id: 'cat-1',
-        name: 'สินค้าอุปโภค บริโภค',
-        subcategories: ['เครื่องดื่ม', 'ขนมขบเคี้ยว', 'เครื่องปรุงรส']
-      },
-      {
-        id: 'cat-2',
-        name: 'สินค้าเบ็ดเตล็ด',
-        subcategories: ['เชือกฟาง', 'ถุงมือ', 'ไฟแช็ค', 'สก็อตไบร์/ฝอยขัดหม้อ', 'แรปห่ออาหาร', 'กระดาษฟอยล์', 'สมุดฉีก/บิล', 'กระดาษทิชชู', 'เชือก']
-      },
-      {
-        id: 'cat-3',
-        name: 'บรรจุภัณฑ์',
-        subcategories: ['กล่องอาหาร', 'แก้วพลาสติก', 'หลอดกาแฟ']
-      },
-      {
-        id: 'cat-4',
-        name: 'ถุงพลาสติก',
-        subcategories: ['ถุงหิ้ว', 'ถุงร้อน/ถุงเย็น', 'ถุงขยะ']
-      }
+    // โครงสร้างหมวดหมู่หลัก 4 ตัว (เริ่มต้น)
+    const initialCategoryTree = [
+      { id: 'cat-1', name: 'สินค้าอุปโภค บริโภค', children: [] },
+      { id: 'cat-2', name: 'สินค้าเบ็ดเตล็ด', children: [] },
+      { id: 'cat-3', name: 'สินค้าบรรจุภัณฑ์', children: [] },
+      { id: 'cat-4', name: 'ถุงพลาสติก', children: [] }
     ];
+
+    let categoryTree = JSON.parse(localStorage.getItem('kamon_categories')) || initialCategoryTree;
 
     let allPromotions = [];
     let allProducts = [];
@@ -288,13 +313,22 @@
       lucide.createIcons();
       if (localStorage.getItem("kamon_admin_mode") === "true") isAdmin = true;
       updateAdminUI();
-      populateSubcatSelect();
-      renderCategorySidebar();
-      renderSkeletons(); // สร้าง Skeleton Placeholder รอก่อนที่ข้อมูลจะมา
+      refreshCategoriesUI();
+      renderSkeletons();
       loadData();
     });
 
-    // สร้าง Skeleton จำลองสินค้า 8 ชิ้น ป้องกัน layout กระตุกขณะเน็ตช้า
+    function saveCategoryTree() {
+      localStorage.setItem('kamon_categories', JSON.stringify(categoryTree));
+      refreshCategoriesUI();
+    }
+
+    function refreshCategoriesUI() {
+      renderCategorySidebar();
+      populateSubcatSelect();
+      renderManageCategoryTree();
+    }
+
     function renderSkeletons() {
       const container = document.getElementById("product-grid");
       let skeletonHTML = '';
@@ -359,20 +393,162 @@
       }
     }
 
+    // สร้างเมนูหมวดหมู่ฝั่งซ้ายแบบ Recursive (ซ้อนกี่ชั้นก็ได้)
+    function renderCategorySidebar() {
+      const container = document.getElementById("category-tree");
+      let html = `
+        <button onclick="selectSubcategory('ทั้งหมด')" class="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold ${currentSelectedSubcat === 'ทั้งหมด' ? 'bg-amber-400 text-slate-900 font-bold' : 'text-gray-300 hover:bg-emerald-900/50 hover:text-amber-300'} transition flex justify-between items-center mb-2">
+          <span>แสดงทั้งหมด</span>
+        </button>
+      `;
+
+      function buildTree(nodes) {
+        let treeHtml = '';
+        nodes.forEach(node => {
+          const hasChildren = node.children && node.children.length > 0;
+          treeHtml += `
+            <div class="border-b border-emerald-900/30 last:border-0 pb-1">
+              <div class="flex items-center justify-between">
+                <button onclick="${hasChildren ? `toggleCategoryAccordion('${node.id}')` : `selectSubcategory('${node.name}')`}" 
+                        class="w-full text-left px-3 py-2 rounded-xl text-xs md:text-sm font-bold ${currentSelectedSubcat === node.name ? 'text-amber-400 font-extrabold bg-emerald-900/60' : 'text-gray-200 hover:text-amber-400'} flex justify-between items-center transition group">
+                  <span class="group-hover:translate-x-0.5 transition-transform">${node.name}</span>
+                  ${hasChildren ? `<i id="icon-${node.id}" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200 text-gray-400"></i>` : ''}
+                </button>
+              </div>
+              ${hasChildren ? `
+                <div id="sub-${node.id}" class="hidden pl-3 space-y-1 mt-1 border-l-2 border-emerald-800/40 ml-2">
+                  ${buildTree(node.children)}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+        return treeHtml;
+      }
+
+      html += buildTree(categoryTree);
+      container.innerHTML = html;
+      lucide.createIcons();
+    }
+
+    // สร้างตัวเลือกใส่ลง Dropdown ในหน้าเพิ่มสินค้า
     function populateSubcatSelect() {
       const select = document.getElementById("prod-subcat");
       select.innerHTML = "";
-      categoryData.forEach(cat => {
-        const optgroup = document.createElement("optgroup");
-        optgroup.label = cat.name;
-        cat.subcategories.forEach(sub => {
+
+      function traverse(nodes, depth = 0) {
+        nodes.forEach(node => {
+          const prefix = "— ".repeat(depth);
           const opt = document.createElement("option");
-          opt.value = sub;
-          opt.textContent = sub;
-          optgroup.appendChild(opt);
+          opt.value = node.name;
+          opt.textContent = `${prefix}${node.name}`;
+          select.appendChild(opt);
+
+          if (node.children && node.children.length > 0) {
+            traverse(node.children, depth + 1);
+          }
         });
-        select.appendChild(optgroup);
-      });
+      }
+
+      traverse(categoryTree);
+      
+      const parentSelect = document.getElementById("parent-cat-select");
+      parentSelect.innerHTML = `<option value="root">-- เป็นหมวดหมู่หลัก (Root) --</option>`;
+      function populateParentSelect(nodes, depth = 0) {
+        nodes.forEach(node => {
+          const prefix = "— ".repeat(depth);
+          const opt = document.createElement("option");
+          opt.value = node.id;
+          opt.textContent = `${prefix}${node.name}`;
+          parentSelect.appendChild(opt);
+
+          if (node.children && node.children.length > 0) {
+            populateParentSelect(node.children, depth + 1);
+          }
+        });
+      }
+      populateParentSelect(categoryTree);
+    }
+
+    // แสดงโครงสร้างจัดการหมวดหมู่ใน Modal Admin
+    function renderManageCategoryTree() {
+      const container = document.getElementById("cat-manage-tree");
+
+      function buildManageTree(nodes) {
+        let html = '<ul class="space-y-1 pl-2">';
+        nodes.forEach(node => {
+          html += `
+            <li class="flex items-center justify-between bg-[#122a22] p-1.5 rounded border border-emerald-900/50">
+              <span class="text-amber-300 font-medium">${node.name}</span>
+              <button onclick="deleteCategoryNode('${node.id}')" class="text-red-400 hover:text-red-300 p-0.5" title="ลบหมวดหมู่นี้">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </li>
+          `;
+          if (node.children && node.children.length > 0) {
+            html += `<div class="pl-3 border-l border-emerald-800/60">${buildManageTree(node.children)}</div>`;
+          }
+        });
+        html += '</ul>';
+        return html;
+      }
+
+      container.innerHTML = buildManageTree(categoryTree);
+      lucide.createIcons();
+    }
+
+    function addNewCategory() {
+      const nameInput = document.getElementById("new-cat-name");
+      const parentId = document.getElementById("parent-cat-select").value;
+      const catName = nameInput.value.trim();
+
+      if (!catName) {
+        alert("กรุณากรอกชื่อหมวดหมู่");
+        return;
+      }
+
+      const newNode = {
+        id: "cat-" + Date.now(),
+        name: catName,
+        children: []
+      };
+
+      if (parentId === "root") {
+        categoryTree.push(newNode);
+      } else {
+        function insertChild(nodes) {
+          for (let node of nodes) {
+            if (node.id === parentId) {
+              node.children.push(newNode);
+              return true;
+            }
+            if (node.children && insertChild(node.children)) return true;
+          }
+          return false;
+        }
+        insertChild(categoryTree);
+      }
+
+      saveCategoryTree();
+      nameInput.value = "";
+      alert(`เพิ่มหมวดหมู่ "${catName}" เรียบร้อยแล้ว`);
+    }
+
+    function deleteCategoryNode(id) {
+      if (!confirm("ยืนยันลบหมวดหมู่นี้และหมวดหมู่ย่อยทั้งหมด?")) return;
+
+      function removeNode(nodes) {
+        return nodes.filter(node => {
+          if (node.id === id) return false;
+          if (node.children) {
+            node.children = removeNode(node.children);
+          }
+          return true;
+        });
+      }
+
+      categoryTree = removeNode(categoryTree);
+      saveCategoryTree();
     }
 
     async function loadData() {
@@ -443,47 +619,16 @@
       lucide.createIcons();
     }
 
-    function renderCategorySidebar() {
-      const container = document.getElementById("category-tree");
-      
-      let html = `
-        <button onclick="selectSubcategory('ทั้งหมด')" class="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold ${currentSelectedSubcat === 'ทั้งหมด' ? 'bg-amber-400 text-slate-900 font-bold' : 'text-gray-300 hover:bg-emerald-900/50 hover:text-amber-300'} transition flex justify-between items-center mb-2">
-          <span>แสดงทั้งหมด</span>
-        </button>
-      `;
-
-      categoryData.forEach(cat => {
-        html += `
-          <div class="border-b border-emerald-900/40 last:border-0 pb-1">
-            <button onclick="toggleCategoryAccordion('${cat.id}')" class="w-full text-left px-3 py-2.5 rounded-xl text-xs md:text-sm font-bold text-gray-200 hover:text-amber-400 flex justify-between items-center transition group">
-              <span class="group-hover:translate-x-0.5 transition-transform">${cat.name}</span>
-              <i id="icon-${cat.id}" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200 text-gray-400"></i>
-            </button>
-            <div id="sub-${cat.id}" class="hidden pl-3 space-y-1 mt-1 border-l-2 border-emerald-800/40 ml-2">
-              ${cat.subcategories.map(sub => `
-                <button onclick="selectSubcategory('${sub}')" class="w-full text-left px-3 py-1.5 rounded-lg text-xs ${currentSelectedSubcat === sub ? 'text-amber-400 font-bold bg-emerald-900/60' : 'text-gray-400 hover:text-amber-300 hover:bg-emerald-900/40'} transition flex items-center gap-1.5">
-                  <span class="w-1 h-1 rounded-full bg-emerald-600"></span>
-                  ${sub}
-                </button>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-    }
-
     function toggleCategoryAccordion(catId) {
       const subMenu = document.getElementById(`sub-${catId}`);
       const icon = document.getElementById(`icon-${catId}`);
       
       if (subMenu.classList.contains("hidden")) {
         subMenu.classList.remove("hidden");
-        icon.classList.add("rotate-180");
+        if (icon) icon.classList.add("rotate-180");
       } else {
         subMenu.classList.add("hidden");
-        icon.classList.remove("rotate-180");
+        if (icon) icon.classList.remove("rotate-180");
       }
     }
 
@@ -555,7 +700,6 @@
       lucide.createIcons();
     }
 
-    // ฟังก์ชันย่อขนาดและบีบอัดรูปภาพก่อนส่งขึ้นฐานข้อมูล ป้องกันไฟล์ใหญ่เกินไป
     function compressImage(file, maxWidth = 500, quality = 0.5) {
       return new Promise((resolve) => {
         if (!file) return resolve({ fileData: null, fileName: null });
