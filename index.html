@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>กมลพาณิช - รายการสินค้าและโปรโมชั่น</title>
+  <title>กมลพาณิช - แคตตาล็อกสินค้าออนไลน์</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="preconnect" href="https://unpkg.com">
-
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -18,10 +15,10 @@
     body { 
       font-family: 'Noto Sans Thai', sans-serif; 
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     
     .img-skeleton {
-      background: #122a22;
       background: linear-gradient(90deg, #122a22 0%, #1a3c30 50%, #122a22 100%);
       background-size: 200% 100%;
       animation: skeleton-shimmer 1.2s infinite linear;
@@ -31,164 +28,124 @@
       100% { background-position: -200% 0; }
     }
 
-    @keyframes smoothScroll {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-50%, 0, 0); }
-    }
-
-    .animate-smooth-scroll {
-      display: flex;
-      width: max-content;
-      animation: smoothScroll 20s linear infinite;
-      will-change: transform;
-    }
-
-    .animate-smooth-scroll:hover,
-    .animate-smooth-scroll.is-paused {
-      animation-play-state: paused !important;
-    }
+    /* ซ่อน Scrollbar แต่ยังไถได้ */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 
-<body class="w-full min-h-screen bg-[#0a1f1a] text-white selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between overflow-x-hidden antialiased">
+<body class="w-full min-h-screen bg-[#0a1f1a] text-white flex flex-col justify-between overflow-x-hidden antialiased selection:bg-amber-500">
 
   <div>
-    <!-- Header ร้านค้า -->
-    <header class="relative w-full py-8 md:py-12 px-4 border-b border-emerald-900/40 text-center bg-gradient-to-b from-[#061512] via-[#0a1f1a] to-[#0d2419]">
-     
-     <div class="absolute top-3 right-3 z-20">
+    <!-- Header แคตตาล็อก -->
+    <header class="relative w-full py-5 px-4 border-b border-emerald-900/40 text-center bg-gradient-to-b from-[#061512] via-[#0a1f1a] to-[#0d2419]">
+      <div class="absolute top-3 right-3 z-20">
         <button id="admin-status-btn" onclick="handleAdminToggle()" class="bg-emerald-950/60 text-gray-400 border border-emerald-800/50 p-2 rounded-full backdrop-blur-sm active:scale-95 transition">
           <i id="admin-icon" data-lucide="lock" class="w-4 h-4"></i>
         </button>
-     </div>
+      </div>
 
-     <div class="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
-      <div class="mb-2 text-[#c9a84c] p-2.5 bg-emerald-950/80 rounded-2xl border border-emerald-700/40 shadow-lg">
-       <i data-lucide="shopping-cart" class="w-8 h-8 md:w-12 md:h-12"></i>
+      <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+        <div class="mb-2 text-[#c9a84c] p-2 bg-emerald-950/80 rounded-2xl border border-emerald-700/40 shadow">
+          <i data-lucide="book-open-check" class="w-7 h-7 md:w-9 md:h-9"></i>
+        </div>
+        
+        <h1 onclick="handleTitleClick()" class="text-xl md:text-3xl font-extrabold text-white mb-1 cursor-pointer select-none">กมลพาณิช</h1>
+        <p class="text-amber-300 font-medium text-xs mb-3">แคตตาล็อกสินค้าประจำร้าน - โหลดไว ดูง่าย</p>
+        
+        <div class="flex justify-center gap-2">
+          <a href="tel:0812345678" class="bg-[#c9a84c] text-[#0a1f1a] px-3.5 py-1.5 rounded-full font-bold text-xs flex items-center gap-1.5 shadow active:scale-95 transition">
+            <i data-lucide="phone" class="w-3.5 h-3.5"></i> โทรสั่งซื้อ
+          </a>
+          <a href="https://line.me" target="_blank" class="bg-emerald-700 text-white border border-emerald-500/50 px-3.5 py-1.5 rounded-full font-semibold text-xs flex items-center gap-1.5 shadow active:scale-95 transition">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-300"></i> สั่งทาง LINE
+          </a>
+        </div>
       </div>
-      
-      <h1 onclick="handleTitleClick()" class="text-2xl md:text-5xl font-extrabold text-white mb-1 cursor-pointer select-none">กมลพาณิช</h1>
-      <p class="text-amber-300 font-medium text-xs md:text-lg mb-4">ครบครัน สินค้าเพื่อองค์กรและร้านค้า</p>
-      
-      <div class="flex justify-center gap-2.5">
-        <a href="tel:0812345678" class="bg-[#c9a84c] text-[#0a1f1a] px-4 py-1.5 rounded-full font-bold text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition">
-          <i data-lucide="phone" class="w-3.5 h-3.5"></i> โทรติดต่อเรา
-        </a>
-        <a href="https://maps.app.goo.gl/CAakXKi17CUUnvnG6" target="_blank" class="bg-emerald-800 text-amber-300 border border-emerald-600/50 px-4 py-1.5 rounded-full font-semibold text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition">
-          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-red-400"></i> แผนที่ร้าน
-        </a>
-      </div>
-     </div>
     </header>
 
-    <!-- Promotions Section -->
-    <section class="w-full bg-[#0d2419] py-6 border-b border-emerald-900/30 overflow-hidden">
-     <div class="max-w-7xl mx-auto px-4 mb-3 flex justify-between items-center">
-        <h2 class="text-lg md:text-xl font-bold text-amber-400 flex items-center gap-1.5">
-          <i data-lucide="sparkles" class="w-4 h-4"></i> โปรโมชั่นพิเศษ
-        </h2>
-        <button onclick="openModal('modal-promo')" class="admin-only hidden bg-amber-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow transition">
-          <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> เพิ่มโปรโมชั่น
-        </button>
-      </div>
-
-      <div class="w-full overflow-hidden relative">
-        <div id="promo-track" 
-             class="animate-smooth-scroll flex gap-3 px-4"
-             ontouchstart="this.classList.add('is-paused')" 
-             ontouchend="this.classList.remove('is-paused')">
-          <div class="w-full text-center py-6 text-gray-400 flex flex-col items-center gap-2">
-            <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-amber-400"></i>
-            <span class="text-xs">กำลังโหลดโปรโมชั่น...</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Main Products Section -->
-    <section class="w-full bg-[#0f2920] py-6 px-4">
-      <div class="max-w-7xl mx-auto">
+    <!-- แคตตาล็อกเมนู (หมวดหมู่ซ้อนหมวดหมู่) -->
+    <section class="w-full bg-[#0d2419] border-b border-emerald-900/40 sticky top-0 z-30 shadow-md">
+      <div class="max-w-7xl mx-auto px-3 py-2.5">
         
-        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-          <h2 class="text-lg md:text-xl font-bold text-amber-400 flex items-center gap-1.5">
-            <i data-lucide="layout-grid" class="w-4 h-4"></i> หมวดหมู่และรายการสินค้า
-          </h2>
-          <div class="flex gap-2">
-            <button onclick="openModal('modal-manage-cat')" class="admin-only hidden bg-emerald-800 text-amber-300 font-bold px-2.5 py-1.5 rounded-xl text-xs flex items-center gap-1 border border-emerald-600/50 shadow">
+        <!-- แถบทางเดินหมวดหมู่ (Breadcrumb Path) -->
+        <div class="flex items-center justify-between gap-2">
+          <div id="breadcrumb-container" class="flex items-center gap-1 text-xs text-amber-300 overflow-x-auto no-scrollbar py-1">
+            <button onclick="navigateToRoot()" class="font-bold flex items-center gap-1 bg-emerald-900/60 px-2 py-1 rounded-lg border border-emerald-700/40 hover:bg-emerald-800">
+              <i data-lucide="home" class="w-3 h-3"></i> หน้าแรก
+            </button>
+            <span id="breadcrumb-path" class="flex items-center gap-1 text-gray-300"></span>
+          </div>
+
+          <!-- ปุ่ม Admin จัดการหมวดหมู่ -->
+          <div class="admin-only hidden shrink-0 flex gap-1.5">
+            <button onclick="openModal('modal-manage-cat')" class="bg-amber-500 text-slate-900 font-bold px-2.5 py-1 rounded-lg text-xs flex items-center gap-1 shadow">
               <i data-lucide="folder-tree" class="w-3.5 h-3.5"></i> จัดการหมวดหมู่
             </button>
-            <button onclick="openModal('modal-product')" class="admin-only hidden bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow">
-              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> เพิ่มสินค้าใหม่
+            <button onclick="openModal('modal-product')" class="bg-emerald-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs flex items-center gap-1 shadow">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> + สินค้า
             </button>
           </div>
         </div>
 
-        <div class="md:hidden mb-3">
-          <button onclick="toggleMobileSidebar(true)" class="w-full bg-[#122a22] border border-emerald-700/60 text-amber-300 font-bold px-3.5 py-2.5 rounded-xl flex justify-between items-center shadow-sm text-xs">
-            <span class="flex items-center gap-2">
-              <i data-lucide="list-tree" class="w-4 h-4"></i>
-              <span id="mobile-category-title">เลือกหมวดหมู่สินค้า</span>
-            </span>
-            <i data-lucide="chevron-down" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <div class="flex flex-col md:flex-row gap-5">
-
-          <!-- Sidebar -->
-          <aside id="sidebar-container" class="hidden md:block w-full md:w-60 shrink-0 bg-[#122a22] border border-emerald-800/50 rounded-2xl p-3.5 h-fit sticky top-4 shadow-xl z-40">
-            <div class="flex justify-between items-center mb-3 pb-2 border-b border-emerald-800/60">
-              <h3 class="font-bold text-amber-400 text-sm flex items-center gap-1.5">
-                <i data-lucide="layers" class="w-4 h-4"></i> หมวดหมู่สินค้า
-              </h3>
-              <button onclick="toggleMobileSidebar(false)" class="md:hidden text-gray-400 hover:text-white p-1">
-                <i data-lucide="x" class="w-5 h-5"></i>
-              </button>
-            </div>
-
-            <div id="category-tree" class="space-y-1"></div>
-          </aside>
-
-          <!-- Main Product Grid -->
-          <main class="flex-1">
-            <div class="mb-3 flex justify-between items-center bg-[#122a22]/60 p-2.5 rounded-xl border border-emerald-900/50">
-              <h3 id="selected-cat-label" class="text-xs md:text-sm font-bold text-white flex items-center gap-1.5">
-                <i data-lucide="grid" class="w-3.5 h-3.5 text-amber-400"></i> ทั้งหมด
-              </h3>
-              <span id="product-count" class="text-[11px] text-gray-400 bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800/50">0 รายการ</span>
-            </div>
-
-            <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-3.5">
-            </div>
-          </main>
-
+        <!-- รายการหมวดหมู่อยู่ในระดับปัจจุบัน (Subcategory Pills) -->
+        <div id="subcategories-bar" class="flex gap-2 overflow-x-auto no-scrollbar mt-2 pt-1 border-t border-emerald-900/30">
+          <!-- Rendered via JS -->
         </div>
 
       </div>
     </section>
+
+    <!-- ส่วนแสดงสินค้า / ภาพแผ่นแคตตาล็อก -->
+    <main class="max-w-7xl mx-auto px-3 py-4">
+      <div class="flex justify-between items-center mb-3">
+        <h2 id="current-view-title" class="text-sm md:text-base font-bold text-amber-400 flex items-center gap-1.5">
+          <i data-lucide="grid" class="w-4 h-4"></i> รายการสินค้าทั้งหมด
+        </h2>
+        <span id="catalog-count" class="text-[11px] text-gray-400 bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800/50">0 รายการ</span>
+      </div>
+
+      <!-- กริดแสดงแผ่นภาพแคตตาล็อกสินค้า -->
+      <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-4">
+        <!-- Rendered via JS -->
+      </div>
+    </main>
   </div>
 
   <!-- Footer -->
-  <footer class="w-full bg-[#061512] border-t border-emerald-900/60 py-6 px-4 text-center text-xs text-gray-400">
-    <p class="font-bold text-amber-400 mb-1">ร้านกมลพาณิช</p>
-    <p class="text-[11px] text-gray-500">© กมลพาณิช - สงวนลิขสิทธิ์</p>
+  <footer class="w-full bg-[#061512] border-t border-emerald-900/60 py-5 px-4 text-center text-xs text-gray-400 mt-6">
+    <p class="font-bold text-amber-400 mb-0.5">กมลพาณิช แคตตาล็อกดิจิทัล</p>
+    <p class="text-[10px] text-gray-500">แตะที่รูปสินค้าเพื่อดูภาพขยายความละเอียดสูง</p>
   </footer>
 
-  <!-- Modal Admin: จัดการหมวดหมู่ -->
+  <!-- Lightbox สำหรับดูภาพใหญ่ (รองรับการปัดสำหรับมือถือ) -->
+  <div id="image-lightbox" onclick="closeLightbox()" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col items-center justify-center p-2 backdrop-blur-md">
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white bg-emerald-900/80 p-2 rounded-full border border-emerald-600/50">
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <img id="lightbox-img" src="" class="max-w-full max-h-[80vh] object-contain rounded-lg border border-emerald-800/40 shadow-2xl">
+    <div class="mt-3 text-center px-4">
+      <h3 id="lightbox-title" class="text-amber-400 font-bold text-base"></h3>
+      <p id="lightbox-price" class="text-white text-sm font-semibold mt-0.5"></p>
+    </div>
+  </div>
+
+  <!-- Modal Admin: จัดการหมวดหมู่แบบซ้อนหลายชั้น -->
   <div id="modal-manage-cat" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-4 w-full max-w-md shadow-2xl">
       <div class="flex justify-between items-center mb-3 pb-2 border-b border-emerald-800">
-        <h3 class="text-sm font-bold text-amber-400 flex items-center gap-1.5"><i data-lucide="folder-plus" class="w-4 h-4"></i> จัดการหมวดหมู่สินค้า</h3>
+        <h3 class="text-sm font-bold text-amber-400 flex items-center gap-1.5"><i data-lucide="folder-tree" class="w-4 h-4"></i> จัดการหมวดหมู่ซ้อนหมวดหมู่</h3>
         <button onclick="closeModal('modal-manage-cat')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
       
       <div class="space-y-3">
         <div class="bg-[#0a1f1a] p-3 rounded-xl border border-emerald-800">
-          <h4 class="text-xs font-bold text-emerald-400 mb-2">เพิ่มหมวดหมู่ใหม่</h4>
-          <input type="text" id="new-cat-name" placeholder="ชื่อหมวดหมู่ใหม่" class="w-full bg-[#122a22] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none mb-2">
+          <h4 class="text-xs font-bold text-emerald-400 mb-2">เพิ่มหมวดหมู่ย่อยใหม่</h4>
+          <input type="text" id="new-cat-name" placeholder="ชื่อหมวดหมู่" class="w-full bg-[#122a22] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none mb-2">
           
+          <label class="block text-[11px] text-gray-400 mb-1">ให้อยู่ภายใต้หมวดหมู่:</label>
           <select id="parent-cat-select" class="w-full bg-[#122a22] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none mb-2.5">
-            <option value="root">-- เป็นหมวดหมู่หลัก (Root) --</option>
+            <option value="root">-- เป็นหมวดหมู่หลักสูงสุด (Root) --</option>
           </select>
           
           <button onclick="addNewCategory()" class="w-full bg-amber-500 text-slate-900 font-bold py-1.5 rounded-xl text-xs">
@@ -197,65 +154,40 @@
         </div>
 
         <div>
-          <h4 class="text-xs font-bold text-gray-300 mb-1.5">โครงสร้างหมวดหมู่ปัจจุบัน</h4>
-          <div id="cat-manage-tree" class="max-h-52 overflow-y-auto space-y-1 bg-[#0a1f1a] p-2.5 rounded-xl border border-emerald-800 text-xs">
+          <h4 class="text-xs font-bold text-gray-300 mb-1.5">ผังหมวดหมู่ทั้งหมด</h4>
+          <div id="cat-manage-tree" class="max-h-48 overflow-y-auto space-y-1 bg-[#0a1f1a] p-2 rounded-xl border border-emerald-800 text-xs">
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Admin: เพิ่มโปรโมชั่น -->
-  <div id="modal-promo" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-4 w-full max-w-md shadow-2xl">
-      <div class="flex justify-between items-center mb-3 pb-2 border-b border-emerald-800">
-        <h3 class="text-sm font-bold text-amber-400">เพิ่มโปรโมชั่นใหม่</h3>
-        <button onclick="closeModal('modal-promo')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <form id="form-promo" class="space-y-2.5">
-        <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">หัวข้อโปรโมชั่น</label>
-          <input type="text" id="promo-title" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">รายละเอียด</label>
-          <textarea id="promo-desc" rows="2" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">รูปภาพโปรโมชั่น</label>
-          <input type="file" id="promo-file" accept="image/*" class="w-full text-xs text-gray-300 bg-[#0a1f1a] rounded-xl border border-emerald-800 p-1.5">
-        </div>
-        <button type="submit" id="btn-submit-promo" class="w-full bg-amber-500 text-slate-900 font-bold py-2 rounded-xl text-xs mt-1">บันทึกโปรโมชั่น</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal Admin: เพิ่มสินค้า -->
+  <!-- Modal Admin: เพิ่มสินค้า/หน้าแผ่นแคตตาล็อก -->
   <div id="modal-product" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#122a22] border border-emerald-700/50 rounded-2xl p-4 w-full max-w-md shadow-2xl">
       <div class="flex justify-between items-center mb-3 pb-2 border-b border-emerald-800">
-        <h3 class="text-sm font-bold text-amber-400">เพิ่มสินค้าใหม่</h3>
+        <h3 class="text-sm font-bold text-amber-400">เพิ่มรายการในแคตตาล็อก</h3>
         <button onclick="closeModal('modal-product')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
       <form id="form-product" class="space-y-2.5">
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">ชื่อสินค้า</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">ชื่อสินค้า / หัวข้อหน้าแคตตาล็อก</label>
           <input type="text" id="prod-name" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">หมวดหมู่สินค้า</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">เลือกหมวดหมู่ปลายทาง</label>
           <select id="prod-subcat" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
           </select>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">ราคา (บาท)</label>
-          <input type="number" id="prod-price" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
+          <label class="block text-xs font-semibold text-gray-300 mb-1">ราคา (บาท) [ระบุ 0 หากต้องการซ่อนราคา]</label>
+          <input type="number" id="prod-price" value="0" required class="w-full bg-[#0a1f1a] border border-emerald-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">รูปภาพสินค้า</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">รูปภาพสินค้า / ภาพแผ่นแคตตาล็อก</label>
           <input type="file" id="prod-file" accept="image/*" class="w-full text-xs text-gray-300 bg-[#0a1f1a] rounded-xl border border-emerald-800 p-1.5">
         </div>
-        <button type="submit" id="btn-submit-prod" class="w-full bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs mt-1">บันทึกสินค้า</button>
+        <button type="submit" id="btn-submit-prod" class="w-full bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs mt-1">บันทึกรูปเข้าแคตตาล็อก</button>
       </form>
     </div>
   </div>
@@ -266,19 +198,29 @@
 
     const PLACEHOLDER_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%2334d399' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='3' width='20' height='14' rx='2' ry='2'/><line x1='8' y1='21' x2='16' y2='21'/><line x1='12' y1='17' x2='12' y2='21'/></svg>";
 
+    // โครงสร้างหมวดหมู่ซ้อนหมวดหมู่ตั้งต้น (Nested Category Structure)
     const initialCategoryTree = [
-      { id: 'cat-1', name: 'สินค้าอุปโภค บริโภค', children: [] },
-      { id: 'cat-2', name: 'สินค้าเบ็ดเตล็ด', children: [] },
-      { id: 'cat-3', name: 'สินค้าบรรจุภัณฑ์', children: [] },
-      { id: 'cat-4', name: 'ถุงพลาสติก', children: [] }
+      { 
+        id: 'cat-1', 
+        name: 'สินค้าอุปโภค บริโภค', 
+        children: [
+          { id: 'cat-1-1', name: 'เครื่องดื่ม', children: [] },
+          { id: 'cat-1-2', name: 'ขนมขบเคี้ยว', children: [] }
+        ] 
+      },
+      { 
+        id: 'cat-2', 
+        name: 'บรรจุภัณฑ์ & ถุงพลาสติก', 
+        children: [
+          { id: 'cat-2-1', name: 'ถุงหิ้ว / ถุงแก้ว', children: [] },
+          { id: 'cat-2-2', name: 'กล่องใส่อาหาร', children: [] }
+        ] 
+      }
     ];
 
-    let categoryTree = JSON.parse(localStorage.getItem('kamon_categories')) || initialCategoryTree;
-
-    let allPromotions = [];
+    let categoryTree = JSON.parse(localStorage.getItem('kamon_categories_v2')) || initialCategoryTree;
     let allProducts = [];
-    let currentSelectedSubcat = 'ทั้งหมด';
-    let isLoading = true;
+    let currentPath = []; // เก็บ Stack ของหมวดหมู่ที่เลือก [Parent, Child, Sub-Child]
     let isAdmin = false;
     let titleClickCount = 0;
 
@@ -287,34 +229,19 @@
       if (localStorage.getItem("kamon_admin_mode") === "true") isAdmin = true;
       updateAdminUI();
       refreshCategoriesUI();
-      renderSkeletons();
       loadData();
     });
 
     function saveCategoryTree() {
-      localStorage.setItem('kamon_categories', JSON.stringify(categoryTree));
+      localStorage.setItem('kamon_categories_v2', JSON.stringify(categoryTree));
       refreshCategoriesUI();
     }
 
     function refreshCategoriesUI() {
-      renderCategorySidebar();
+      renderCategoryNavigation();
       populateSubcatSelect();
       renderManageCategoryTree();
-    }
-
-    function renderSkeletons() {
-      const container = document.getElementById("product-grid");
-      let skeletonHTML = '';
-      for (let i = 0; i < 6; i++) {
-        skeletonHTML += `
-          <div class="bg-[#122a22] rounded-xl overflow-hidden border border-emerald-900/40 p-2 space-y-2">
-            <div class="w-full aspect-square img-skeleton rounded-lg"></div>
-            <div class="h-3 bg-emerald-900/50 rounded w-3/4 animate-pulse"></div>
-            <div class="h-4 bg-amber-950/60 rounded w-1/2 animate-pulse"></div>
-          </div>
-        `;
-      }
-      container.innerHTML = skeletonHTML;
+      renderCatalogGrid();
     }
 
     function updateAdminUI() {
@@ -340,17 +267,15 @@
           isAdmin = false;
           localStorage.removeItem("kamon_admin_mode");
           updateAdminUI();
-          renderPromotions();
-          renderProducts(currentSelectedSubcat);
+          renderCatalogGrid();
         }
       } else {
-        const pwd = prompt("กรุณาใส่รหัสผ่านเจ้าของร้านเพื่อจัดการสินค้า:");
+        const pwd = prompt("กรุณาใส่รหัสผ่านเจ้าของร้าน:");
         if (pwd === ADMIN_PASSWORD) {
           isAdmin = true;
           localStorage.setItem("kamon_admin_mode", "true");
           updateAdminUI();
-          renderPromotions();
-          renderProducts(currentSelectedSubcat);
+          renderCatalogGrid();
           alert("ยินดีต้อนรับ! เข้าสู่โหมดเจ้าของร้านเรียบร้อยแล้ว");
         } else if (pwd !== null) {
           alert("รหัสผ่านไม่ถูกต้อง!");
@@ -366,43 +291,171 @@
       }
     }
 
-    function renderCategorySidebar() {
-      const container = document.getElementById("category-tree");
-      let html = `
-        <button onclick="selectSubcategory('ทั้งหมด')" class="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-semibold ${currentSelectedSubcat === 'ทั้งหมด' ? 'bg-amber-400 text-slate-900 font-bold' : 'text-gray-300 hover:bg-emerald-900/50 hover:text-amber-300'} transition flex justify-between items-center mb-1">
-          <span>แสดงทั้งหมด</span>
-        </button>
-      `;
+    /* === ระบบนำทางหมวดหมู่แบบ N-Level (Breadcrumbs & Navigation) === */
+    function navigateToRoot() {
+      currentPath = [];
+      renderCategoryNavigation();
+      renderCatalogGrid();
+    }
 
-      function buildTree(nodes) {
-        let treeHtml = '';
-        nodes.forEach(node => {
-          const hasChildren = node.children && node.children.length > 0;
-          treeHtml += `
-            <div class="border-b border-emerald-900/30 last:border-0 pb-0.5">
-              <div class="flex items-center justify-between">
-                <button onclick="${hasChildren ? `toggleCategoryAccordion('${node.id}')` : `selectSubcategory('${node.name}')`}" 
-                        class="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-bold ${currentSelectedSubcat === node.name ? 'text-amber-400 font-extrabold bg-emerald-900/60' : 'text-gray-200 hover:text-amber-400'} flex justify-between items-center transition">
-                  <span>${node.name}</span>
-                  ${hasChildren ? `<i id="icon-${node.id}" data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200 text-gray-400"></i>` : ''}
-                </button>
-              </div>
-              ${hasChildren ? `
-                <div id="sub-${node.id}" class="hidden pl-2.5 space-y-0.5 mt-0.5 border-l border-emerald-800/40 ml-1.5">
-                  ${buildTree(node.children)}
-                </div>
-              ` : ''}
-            </div>
-          `;
-        });
-        return treeHtml;
+    function navigateToPath(index) {
+      currentPath = currentPath.slice(0, index + 1);
+      renderCategoryNavigation();
+      renderCatalogGrid();
+    }
+
+    function selectCategoryNode(node) {
+      currentPath.push(node);
+      renderCategoryNavigation();
+      renderCatalogGrid();
+    }
+
+    function renderCategoryNavigation() {
+      // 1. Render Breadcrumb Path
+      const breadcrumbPath = document.getElementById("breadcrumb-path");
+      breadcrumbPath.innerHTML = currentPath.map((node, idx) => `
+        <i data-lucide="chevron-right" class="w-3 h-3 text-gray-500 shrink-0"></i>
+        <button onclick="navigateToPath(${idx})" class="font-bold bg-emerald-950/80 text-amber-400 px-2 py-0.5 rounded-md border border-emerald-800/50 hover:underline shrink-0">
+          ${node.name}
+        </button>
+      `).join('');
+
+      // 2. Render Subcategory Pills ในระดับปัจจุบัน
+      const subBar = document.getElementById("subcategories-bar");
+      let currentChildren = categoryTree;
+
+      if (currentPath.length > 0) {
+        const lastNode = currentPath[currentPath.length - 1];
+        currentChildren = lastNode.children || [];
       }
 
-      html += buildTree(categoryTree);
-      container.innerHTML = html;
+      if (currentChildren.length === 0) {
+        subBar.innerHTML = `<span class="text-[11px] text-gray-400 italic py-0.5">หมวดหมู่ชั้นในสุดแล้ว</span>`;
+      } else {
+        subBar.innerHTML = currentChildren.map(child => `
+          <button onclick='selectCategoryNode(${JSON.stringify(child)})' 
+                  class="bg-[#122a22] text-amber-300 border border-emerald-700/60 px-3 py-1 rounded-full text-xs font-semibold shrink-0 flex items-center gap-1 active:scale-95 transition hover:bg-emerald-800 hover:text-white">
+            <i data-lucide="folder" class="w-3 h-3 text-amber-400"></i>
+            <span>${child.name}</span>
+            ${child.children && child.children.length > 0 ? `<span class="bg-emerald-900 text-[10px] px-1.5 py-0.2 rounded-full text-gray-300 ml-0.5">+</span>` : ''}
+          </button>
+        `).join('');
+      }
+
+      // ปรับแต่งหัวข้อตามหน้าปัจจุบัน
+      const titleLabel = document.getElementById("current-view-title");
+      if (currentPath.length === 0) {
+        titleLabel.innerHTML = `<i data-lucide="grid" class="w-4 h-4 text-amber-400"></i> แคตตาล็อกทั้งหมด`;
+      } else {
+        titleLabel.innerHTML = `<i data-lucide="folder-open" class="w-4 h-4 text-amber-400"></i> ${currentPath[currentPath.length - 1].name}`;
+      }
+
       lucide.createIcons();
     }
 
+    /* === ตัวดึงข้อมูล และ Render แคตตาล็อกสินค้า === */
+    async function loadData() {
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await res.json();
+        allProducts = data.products || [];
+        renderCatalogGrid();
+      } catch (err) {
+        console.error("Load error:", err);
+      }
+    }
+
+    function renderCatalogGrid() {
+      const container = document.getElementById("catalog-grid");
+      const countLabel = document.getElementById("catalog-count");
+
+      let activeCategoryName = currentPath.length > 0 ? currentPath[currentPath.length - 1].name : 'ทั้งหมด';
+
+      // ฟังก์ชันรวบรวมชื่อหมวดหมู่ย่อยทั้งหมดที่ซ้อนอยู่ข้างใต้
+      function getAllChildNames(node) {
+        let names = [node.name];
+        if (node.children) {
+          node.children.forEach(child => {
+            names = names.concat(getAllChildNames(child));
+          });
+        }
+        return names;
+      }
+
+      let validCategoryNames = [];
+      if (currentPath.length > 0) {
+        validCategoryNames = getAllChildNames(currentPath[currentPath.length - 1]);
+      }
+
+      const filtered = activeCategoryName === 'ทั้งหมด' 
+        ? allProducts 
+        : allProducts.filter(p => validCategoryNames.includes(p.category) || validCategoryNames.includes(p.subcat));
+
+      countLabel.innerText = `${filtered.length} รายการ`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-10 text-gray-400 bg-[#122a22]/30 rounded-xl border border-emerald-900/30">
+            <i data-lucide="image-off" class="w-8 h-8 mx-auto text-gray-500 mb-2"></i>
+            <p class="text-xs">ยังไม่มีรายการแผ่นภาพในหมวดหมู่นี้</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => {
+        const img = p.imageUrl || PLACEHOLDER_SVG;
+        const hasPrice = Number(p.price) > 0;
+
+        return `
+          <div class="bg-[#122a22] rounded-xl overflow-hidden border border-emerald-800/40 flex flex-col justify-between shadow-md group">
+            <div onclick="openLightbox('${img}', '${p.name.replace(/'/g, "\\'")}', '${hasPrice ? Number(p.price).toLocaleString() + ' บาท' : ''}')" class="cursor-pointer">
+              <div class="relative w-full aspect-square bg-[#0a1f1a] img-skeleton overflow-hidden">
+                <img src="${img}" 
+                     alt="${p.name}" 
+                     loading="lazy" 
+                     decoding="async"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                     onload="this.parentElement.classList.remove('img-skeleton');"
+                     onerror="this.src='${PLACEHOLDER_SVG}';">
+                <span class="absolute top-1.5 left-1.5 text-[9px] text-amber-300 bg-black/75 backdrop-blur-sm px-2 py-0.5 rounded-full font-semibold z-10">${p.category || 'แคตตาล็อก'}</span>
+                <div class="absolute bottom-1.5 right-1.5 bg-black/60 p-1 rounded-full text-white/80">
+                  <i data-lucide="maximize-2" class="w-3 h-3"></i>
+                </div>
+              </div>
+              
+              <div class="p-2.5">
+                <h4 class="font-bold text-xs text-white line-clamp-2 leading-tight">${p.name}</h4>
+                ${hasPrice ? `<p class="text-amber-400 font-extrabold text-xs md:text-sm mt-1">${Number(p.price).toLocaleString()} <span class="text-[9px] text-gray-400 font-normal">บาท</span></p>` : ''}
+              </div>
+            </div>
+            
+            <div class="admin-only ${isAdmin ? '' : 'hidden'} p-2 pt-0">
+              <button onclick="deleteItem('Products', '${p.id}')" class="bg-red-600/20 text-red-300 border border-red-500/30 text-[10px] py-1 rounded-lg w-full flex items-center justify-center gap-1">
+                <i data-lucide="trash-2" class="w-3 h-3"></i> ลบรายการ
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    /* === Lightbox แสดงภาพขยายขนาดใหญ่ === */
+    function openLightbox(src, title, price) {
+      document.getElementById("lightbox-img").src = src;
+      document.getElementById("lightbox-title").innerText = title;
+      document.getElementById("lightbox-price").innerText = price;
+      document.getElementById("image-lightbox").classList.remove("hidden");
+    }
+
+    function closeLightbox() {
+      document.getElementById("image-lightbox").classList.add("hidden");
+    }
+
+    /* === จัดการ Select หมวดหมู่สำหรับ Modal เพิ่มสินค้า / หมวดหมู่ === */
     function populateSubcatSelect() {
       const select = document.getElementById("prod-subcat");
       select.innerHTML = "";
@@ -420,11 +473,10 @@
           }
         });
       }
-
       traverse(categoryTree);
       
       const parentSelect = document.getElementById("parent-cat-select");
-      parentSelect.innerHTML = `<option value="root">-- เป็นหมวดหมู่หลัก (Root) --</option>`;
+      parentSelect.innerHTML = `<option value="root">-- เป็นหมวดหมู่หลักสูงสุด (Root) --</option>`;
       function populateParentSelect(nodes, depth = 0) {
         nodes.forEach(node => {
           const prefix = "— ".repeat(depth);
@@ -450,13 +502,13 @@
           html += `
             <li class="flex items-center justify-between bg-[#122a22] p-1 rounded border border-emerald-900/50">
               <span class="text-amber-300 font-medium">${node.name}</span>
-              <button onclick="deleteCategoryNode('${node.id}')" class="text-red-400 p-0.5" title="ลบหมวดหมู่นี้">
+              <button onclick="deleteCategoryNode('${node.id}')" class="text-red-400 p-0.5 hover:text-red-300">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
               </button>
             </li>
           `;
           if (node.children && node.children.length > 0) {
-            html += `<div class="pl-2 border-l border-emerald-800/60">${buildManageTree(node.children)}</div>`;
+            html += `<div class="pl-2.5 border-l border-emerald-800/60 ml-1">${buildManageTree(node.children)}</div>`;
           }
         });
         html += '</ul>';
@@ -477,11 +529,7 @@
         return;
       }
 
-      const newNode = {
-        id: "cat-" + Date.now(),
-        name: catName,
-        children: []
-      };
+      const newNode = { id: "cat-" + Date.now(), name: catName, children: [] };
 
       if (parentId === "root") {
         categoryTree.push(newNode);
@@ -504,14 +552,12 @@
     }
 
     function deleteCategoryNode(id) {
-      if (!confirm("ยืนยันลบหมวดหมู่นี้และหมวดหมู่ย่อยทั้งหมด?")) return;
+      if (!confirm("ยืนยันลบหมวดหมู่นี้รวมถึงหมวดหมู่ย่อยทั้งหมดที่ซ้อนอยู่ข้างใต้?")) return;
 
       function removeNode(nodes) {
         return nodes.filter(node => {
           if (node.id === id) return false;
-          if (node.children) {
-            node.children = removeNode(node.children);
-          }
+          if (node.children) node.children = removeNode(node.children);
           return true;
         });
       }
@@ -520,158 +566,8 @@
       saveCategoryTree();
     }
 
-    async function loadData() {
-      isLoading = true;
-      try {
-        const res = await fetch(GOOGLE_SCRIPT_URL);
-        const data = await res.json();
-        
-        allPromotions = data.promotions || [];
-        allProducts = data.products || [];
-
-        renderPromotions();
-        renderProducts(currentSelectedSubcat);
-      } catch (err) {
-        console.error("Load error:", err);
-      } finally {
-        isLoading = false;
-      }
-    }
-
-    function renderPromotions() {
-      const track = document.getElementById("promo-track");
-      track.innerHTML = "";
-
-      if (allPromotions.length === 0) {
-        track.innerHTML = `<p class="text-gray-400 w-full text-center py-6 bg-[#122a22]/40 rounded-xl text-xs">ไม่มีโปรโมชั่นในขณะนี้</p>`;
-        return;
-      }
-
-      const createPromoCards = (list) => {
-        return list.map((p, index) => {
-          const img = p.imageUrl || PLACEHOLDER_SVG;
-          const fetchPriority = index === 0 ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"';
-          
-          return `
-            <div class="shrink-0 w-[220px] sm:w-[260px] bg-[#122a22] rounded-xl overflow-hidden border border-emerald-800/40 flex flex-col justify-between shadow-lg cursor-pointer">
-              <div class="relative w-full aspect-square bg-[#0a1f1a] img-skeleton overflow-hidden p-1 flex items-center justify-center">
-                <img src="${img}" ${fetchPriority} 
-                     alt="${p.title}"
-                     class="w-full h-full object-contain rounded-lg" 
-                     onload="this.parentElement.classList.remove('img-skeleton');"
-                     onerror="this.src='${PLACEHOLDER_SVG}';">
-                <span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-extrabold text-[9px] px-2 py-0.5 rounded-full shadow z-10">PROMOTION</span>
-              </div>
-              
-              <div class="p-3 bg-[#122a22] border-t border-emerald-900/50 flex flex-col justify-between flex-1">
-                <div>
-                  <h3 class="text-xs sm:text-sm font-bold text-amber-300 line-clamp-1">${p.title}</h3>
-                  <p class="text-[11px] text-gray-300 mt-0.5 line-clamp-2">${p.desc}</p>
-                </div>
-                <div class="admin-only ${isAdmin ? '' : 'hidden'} mt-2 pt-1.5 border-t border-emerald-900/40 flex justify-end">
-                  <button onclick="deleteItem('Promotions', '${p.id}')" class="bg-red-600/20 text-red-300 border border-red-500/30 text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1">
-                    <i data-lucide="trash-2" class="w-3 h-3"></i> ลบโปรโมชั่น
-                  </button>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      };
-
-      let htmlContent = createPromoCards(allPromotions);
-      if (allPromotions.length > 1) {
-        htmlContent += createPromoCards(allPromotions);
-      }
-
-      track.innerHTML = htmlContent;
-      lucide.createIcons();
-    }
-
-    function toggleCategoryAccordion(catId) {
-      const subMenu = document.getElementById(`sub-${catId}`);
-      const icon = document.getElementById(`icon-${catId}`);
-      
-      if (subMenu.classList.contains("hidden")) {
-        subMenu.classList.remove("hidden");
-        if (icon) icon.classList.add("rotate-180");
-      } else {
-        subMenu.classList.add("hidden");
-        if (icon) icon.classList.remove("rotate-180");
-      }
-    }
-
-    function selectSubcategory(subcat) {
-      currentSelectedSubcat = subcat;
-      document.getElementById("selected-cat-label").innerHTML = `<i data-lucide="grid" class="w-3.5 h-3.5 text-amber-400"></i> ${subcat}`;
-      document.getElementById("mobile-category-title").innerText = subcat === 'ทั้งหมด' ? 'เลือกหมวดหมู่สินค้า' : subcat;
-
-      renderCategorySidebar();
-      renderProducts(subcat);
-
-      if (window.innerWidth < 768) {
-        toggleMobileSidebar(false);
-      }
-    }
-
-    function renderProducts(subcatFilter) {
-      const container = document.getElementById("product-grid");
-      const countLabel = document.getElementById("product-count");
-
-      if (isLoading) return;
-
-      const filtered = subcatFilter === 'ทั้งหมด' 
-        ? allProducts 
-        : allProducts.filter(p => p.category === subcatFilter || p.subcat === subcatFilter);
-
-      countLabel.innerText = `${filtered.length} รายการ`;
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full text-center py-8 text-gray-400 bg-[#122a22]/30 rounded-xl border border-emerald-900/30">
-            <i data-lucide="package-open" class="w-8 h-8 mx-auto text-gray-500 mb-1"></i>
-            <p class="text-xs">ไม่พบรายการสินค้าในหมวดหมู่ "${subcatFilter}"</p>
-          </div>
-        `;
-        lucide.createIcons();
-        return;
-      }
-
-      container.innerHTML = filtered.map(p => {
-        const img = p.imageUrl || PLACEHOLDER_SVG;
-        return `
-          <div id="prod-card-${p.id}" class="bg-[#122a22] rounded-xl overflow-hidden border border-emerald-800/40 flex flex-col justify-between shadow-md">
-            <div>
-              <div class="relative w-full aspect-square bg-[#0a1f1a] img-skeleton overflow-hidden">
-                <img src="${img}" 
-                     alt="${p.name}" 
-                     loading="lazy" 
-                     decoding="async"
-                     class="w-full h-full object-cover" 
-                     onload="this.parentElement.classList.remove('img-skeleton');"
-                     onerror="this.src='${PLACEHOLDER_SVG}';">
-                <span class="absolute top-1.5 left-1.5 text-[9px] text-amber-300 bg-black/70 px-1.5 py-0.5 rounded-full font-semibold z-10">${p.category || p.subcat || 'ทั่วไป'}</span>
-              </div>
-              <div class="p-2.5">
-                <h4 class="font-bold text-xs text-white line-clamp-2 leading-tight">${p.name}</h4>
-                <p class="text-amber-400 font-extrabold text-sm md:text-base mt-1">${Number(p.price).toLocaleString()} <span class="text-[9px] text-gray-400 font-normal">บาท</span></p>
-              </div>
-            </div>
-            
-            <div class="admin-only ${isAdmin ? '' : 'hidden'} p-2 pt-0">
-              <button onclick="deleteItem('Products', '${p.id}')" class="bg-red-600/20 text-red-300 border border-red-500/30 text-[11px] py-1 rounded-lg w-full flex items-center justify-center gap-1">
-                <i data-lucide="trash-2" class="w-3 h-3"></i> ลบสินค้า
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      lucide.createIcons();
-    }
-
-    /* === ULTRA-TINY FILE COMPRESSION (3KB - 8KB WebP) === */
-    function compressImage(file, maxWidth = 240, quality = 0.25) {
+    /* === ระบบบีบอัดภาพเพื่อความเร็วสูงสุดบนมือถือ (3KB - 8KB WebP) === */
+    function compressImage(file, maxWidth = 300, quality = 0.25) {
       return new Promise((resolve) => {
         if (!file) return resolve({ fileData: null, fileName: null });
 
@@ -694,13 +590,12 @@
             canvas.height = height;
 
             const ctx = canvas.getContext('2d');
-            ctx.imageSmoothingEnabled = false; // ปิด Smoothing เพื่อให้บีบอัดไฟล์เล็กสุดๆ
+            ctx.imageSmoothingEnabled = false; 
             ctx.drawImage(img, 0, 0, width, height);
 
-            // บีบอัดเป็น WebP คุณภาพ 25% ไฟล์จิ๋วมากๆ
             resolve({
               fileData: canvas.toDataURL('image/webp', quality),
-              fileName: `img_${Date.now()}.webp`
+              fileName: `cat_${Date.now()}.webp`
             });
           };
           img.onerror = () => resolve({ fileData: null, fileName: null });
@@ -718,37 +613,6 @@
       });
     }
 
-    document.getElementById("form-promo").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById("btn-submit-promo");
-      btn.disabled = true;
-      btn.innerText = "กำลังอัปโหลด...";
-
-      try {
-        const file = document.getElementById("promo-file").files[0];
-        // โปรโมชั่นย่อขนาดเหลือ 360px บีบอัด 25%
-        const imageData = await compressImage(file, 360, 0.25);
-        const tempId = "PR" + Date.now();
-
-        const title = document.getElementById("promo-title").value;
-        const desc = document.getElementById("promo-desc").value;
-        const imageUrl = imageData.fileData || PLACEHOLDER_SVG;
-
-        allPromotions.unshift({ id: tempId, title, desc, imageUrl });
-        renderPromotions();
-
-        closeModal('modal-promo');
-        e.target.reset();
-
-        await sendPostData({ action: "addPromotion", title, desc, fileData: imageData.fileData, fileName: imageData.fileName });
-      } catch (err) {
-        alert("เกิดข้อผิดพลาดในการบันทึกโปรโมชั่น");
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "บันทึกโปรโมชั่น";
-      }
-    });
-
     document.getElementById("form-product").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("btn-submit-prod");
@@ -757,8 +621,7 @@
 
       try {
         const file = document.getElementById("prod-file").files[0];
-        // ย่อขนาดรูปสินค้าเหลือ 240px บีบอัด 25% (ขนาดไฟล์จิ๋วมาก)
-        const imageData = await compressImage(file, 240, 0.25);
+        const imageData = await compressImage(file, 300, 0.25);
         const tempId = "PD" + Date.now();
 
         const name = document.getElementById("prod-name").value;
@@ -767,41 +630,25 @@
         const imageUrl = imageData.fileData || PLACEHOLDER_SVG;
 
         allProducts.unshift({ id: tempId, name, price, category, imageUrl });
-        renderProducts(currentSelectedSubcat);
+        renderCatalogGrid();
 
         closeModal('modal-product');
         e.target.reset();
 
         await sendPostData({ action: "addProduct", name, price, category, fileData: imageData.fileData, fileName: imageData.fileName });
       } catch (err) {
-        alert("เกิดข้อผิดพลาดในการบันทึกสินค้า");
+        alert("เกิดข้อผิดพลาดในการบันทึกรูปภาพ");
       } finally {
         btn.disabled = false;
-        btn.innerText = "บันทึกสินค้า";
+        btn.innerText = "บันทึกรูปเข้าแคตตาล็อก";
       }
     });
 
     async function deleteItem(sheetName, id) {
-      if (confirm("ยืนยันการลบรายการนี้?")) {
-        if (sheetName === "Promotions") {
-          allPromotions = allPromotions.filter(item => String(item.id) !== String(id));
-          renderPromotions();
-        } else {
-          allProducts = allProducts.filter(item => String(item.id) !== String(id));
-          renderProducts(currentSelectedSubcat);
-        }
+      if (confirm("ยืนยันการลบรายการนี้ออกจากแคตตาล็อก?")) {
+        allProducts = allProducts.filter(item => String(item.id) !== String(id));
+        renderCatalogGrid();
         sendPostData({ action: "delete", sheetName, id });
-      }
-    }
-
-    function toggleMobileSidebar(show) {
-      const sidebar = document.getElementById("sidebar-container");
-      if (show) {
-        sidebar.classList.remove("hidden");
-        sidebar.classList.add("fixed", "inset-0", "z-50", "bg-[#0a1f1a]", "p-5", "overflow-y-auto", "w-full", "h-full", "rounded-none");
-      } else {
-        sidebar.classList.add("hidden");
-        sidebar.classList.remove("fixed", "inset-0", "z-50", "bg-[#0a1f1a]", "p-5", "overflow-y-auto", "w-full", "h-full", "rounded-none");
       }
     }
 
