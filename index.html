@@ -237,7 +237,7 @@
       renderProducts();
     }
 
-    /* === Render Promotions (ปรับปรุงให้รองรับภาพทรงสูง/จัตุรัส) === */
+    /* === Render Promotions (ปรับปรุงเฉพาะส่วนรูปภาพโปรโมชั่น) === */
     function renderPromotions() {
       const track = document.getElementById("promo-track");
       track.innerHTML = "";
@@ -253,8 +253,8 @@
           const fetchPriority = index === 0 ? 'fetchpriority="high"' : 'loading="lazy"';
           
           return `
-            <div class="shrink-0 w-[260px] sm:w-[300px] md:w-[340px] max-w-[80vw] bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-xl cursor-pointer">
-              <!-- ใช้ aspect-square และ object-contain เพื่อให้ภาพทรงตั้ง/จัตุรัส แสดงเต็มใบไม่ถูกตัดขอบ -->
+            <div class="shrink-0 w-[280px] sm:w-[320px] bg-[#122a22] rounded-2xl overflow-hidden border border-emerald-800/40 card-hover flex flex-col justify-between shadow-xl cursor-pointer">
+              <!-- ปรับส่วนกรอบรูปภาพเป็น aspect-square และ object-contain เพื่อรองรับทั้งรูปแนวนอน แนวตั้ง และจัตุรัสโดยไม่โดนครอบตัด -->
               <div class="relative w-full aspect-square bg-[#0a1f1a] img-skeleton overflow-hidden flex items-center justify-center p-1">
                 <img src="${img}" ${fetchPriority} 
                      alt="${p.title}"
